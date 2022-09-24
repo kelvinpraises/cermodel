@@ -1,9 +1,9 @@
 import type { AppProps } from "next/app";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ThemeProvider } from "styled-components";
 import Scaffold from "../components/Scaffold";
-import { ModalProvider } from "../state/modal";
-import { SchemaProvider } from "../state/schema";
+import { ModalProvider } from "../state/modals";
+import { SchemasProvider } from "../state/schemas";
 import GlobalStyle from "../styles/global";
 import { darkTheme, lightTheme } from "../theme/theme";
 
@@ -31,14 +31,14 @@ function MyApp({ Component, pageProps }: AppProps) {
     return state;
   }, []);
 
-  const SchemaState = useMemo(() => {
+  const SchemasState = useMemo(() => {
     const db = true;
-    let state: SchemaState;
+    let state: SchemasState;
 
     if (db) {
-      state = [];
+      state = { activeId: "", schemas: [] };
     } else {
-      state = [];
+      state = { activeId: "", schemas: [] };
     }
 
     return state;
@@ -48,14 +48,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ModalProvider initialState={ModalState}>
-      <SchemaProvider initialState={SchemaState}>
+      <SchemasProvider initialState={SchemasState}>
         <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
           <GlobalStyle />
           <Scaffold>
             <Component {...pageProps} />
           </Scaffold>
         </ThemeProvider>
-      </SchemaProvider>
+      </SchemasProvider>
     </ModalProvider>
   );
 }

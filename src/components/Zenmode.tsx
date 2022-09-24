@@ -1,7 +1,7 @@
 import Editor from "@monaco-editor/react";
 import { useContext, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { modalActions, ModalContext } from "../state/modal";
+import { modalActions, ModalContext } from "../state/modals";
 import toggleFullScreen from "../utils/fullscreen";
 
 const SBackground = styled.div`

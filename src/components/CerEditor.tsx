@@ -1,7 +1,7 @@
 import Editor from "@monaco-editor/react";
 import { useContext } from "react";
 import styled from "styled-components";
-import { modalActions, ModalContext } from "../state/modal";
+import { modalActions, ModalContext } from "../state/modals";
 
 const SEditorRest = styled.div`
   width: 25rem;

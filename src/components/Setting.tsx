@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import styled from "styled-components";
-import { modalActions, ModalContext } from "../state/modal";
+import { modalActions, ModalContext } from "../state/modals";
 import SaveChange from "./SaveChange";
 import Text from "./Text";
 // import { Toggle } from "react-toggle-component";

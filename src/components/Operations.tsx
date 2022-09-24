@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import styled from "styled-components";
-import { modalActions, ModalContext } from "../state/modal";
+import { modalActions, ModalContext } from "../state/modals";
 
 const SBox = styled.div`
   width: 4.1rem;

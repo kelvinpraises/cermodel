@@ -1,9 +1,21 @@
-type SchemaState = {
+interface SchemasState {
+  activeId: string;
+  schemas: Schemas;
+}
+
+type Schemas = Schema[];
+
+interface Schema {
   id: string;
   schema: string;
   schemaDetails: SchemaDetails;
   borderColor: string;
-}[];
+}
+
+interface SchemasAction {
+  type: any;
+  payload: Schema;
+}
 
 interface SchemaDetails {
   name: string;
@@ -14,10 +26,7 @@ interface SchemaDetails {
 
 interface SchemaProvider {
   children: React.ReactNode;
-  initialState: SchemaState;
+  initialState: SchemasState;
 }
 
-type SchemaReducer = (
-  state: SchemaState,
-  action: any
-) => SchemaState;
+type SchemasReducer = (state: SchemasState, action: any) => SchemasState;
