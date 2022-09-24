@@ -2,7 +2,7 @@ import { createContext, useReducer } from "react";
 
 const reducer: ModalReducer = (state: ModalState, action: any) => {
   let newState: ModalState;
-  
+
   switch (action.type) {
     case modalActions.OPEN_SETTING_MODAL:
       newState = {
@@ -10,6 +10,7 @@ const reducer: ModalReducer = (state: ModalState, action: any) => {
         showSettings: true,
       };
       break;
+
     case modalActions.CLOSE_SETTING_MODAL:
       newState = {
         ...state,
@@ -23,6 +24,7 @@ const reducer: ModalReducer = (state: ModalState, action: any) => {
         showWelcome: true,
       };
       break;
+
     case modalActions.CLOSE_WELCOME_MODAL:
       newState = {
         ...state,
@@ -36,6 +38,7 @@ const reducer: ModalReducer = (state: ModalState, action: any) => {
         showZenMode: true,
       };
       break;
+
     case modalActions.CLOSE_ZEN_MODE_MODAL:
       newState = {
         ...state,
@@ -49,6 +52,7 @@ const reducer: ModalReducer = (state: ModalState, action: any) => {
         showSchemaDetails: true,
       };
       break;
+
     case modalActions.CLOSE_SCHEMA_MODAL:
       newState = {
         ...state,
@@ -62,6 +66,7 @@ const reducer: ModalReducer = (state: ModalState, action: any) => {
         showDownload: true,
       };
       break;
+
     case modalActions.CLOSE_DOWNLOAD_MODAL:
       newState = {
         ...state,
@@ -71,6 +76,7 @@ const reducer: ModalReducer = (state: ModalState, action: any) => {
 
     default:
       newState = state;
+      break;
   }
 
   return newState;

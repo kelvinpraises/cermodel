@@ -5,14 +5,14 @@ const reducer: SchemaReducer = (state: SchemaState, action: any) => {
 
   switch (action.type) {
     case schemaActions.CREATE_SCHEMA:
-      // creates a new shcema and makes it active
-      // makes the schema active
+      // Adds a new schema to the state
+      // Makes the schema active
       newState = { ...state };
       break;
 
     case schemaActions.UPDATE_SCHEMA:
       // Updates a schema in the state
-      // makes the schema active
+      // Makes the schema active
       newState = { ...state };
       break;
 
@@ -22,7 +22,7 @@ const reducer: SchemaReducer = (state: SchemaState, action: any) => {
       break;
 
     default:
-      newState = { ...state };
+      newState = state;
       break;
   }
 
