@@ -4,8 +4,14 @@ const reducer: SchemaReducer = (state: SchemaState, action: any) => {
   let newState: SchemaState;
 
   switch (action.type) {
-    case schemaActions.ADD_NEW_SCHEMA:
+    case schemaActions.CREATE_SCHEMA:
       // creates a new shcema and makes it active
+      // makes the schema active
+      newState = { ...state };
+      break;
+
+    case schemaActions.UPDATE_SCHEMA:
+      // Updates a schema in the state
       // makes the schema active
       newState = { ...state };
       break;
@@ -15,16 +21,11 @@ const reducer: SchemaReducer = (state: SchemaState, action: any) => {
       newState = { ...state };
       break;
 
-    case schemaActions.MAKE_SCHEMA_ACTIVE:
-      // Makes a schema in the state active
-      newState = { ...state };
-      break;
-
     default:
       newState = { ...state };
       break;
   }
-  
+
   return newState;
 };
 
@@ -44,7 +45,7 @@ export const SchemaProvider: React.FC<SchemaProvider> = ({
 };
 
 export const schemaActions = {
-  ADD_NEW_SCHEMA: "ADD_NEW_SCHEMA",
+  CREATE_SCHEMA: "CREATE_SCHEMA",
+  UPDATE_SCHEMA: "UPDATE_SCHEMA",
   DELETE_SCHEMA: "DELETE_SCHEMA",
-  MAKE_SCHEMA_ACTIVE: "MAKE_SCHEMA_ACTIVE",
 };
