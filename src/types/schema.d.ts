@@ -24,9 +24,27 @@ interface SchemaDetails {
   definitionAlias: string;
 }
 
-interface SchemaProvider {
+interface SchemasProvider {
   children: React.ReactNode;
   initialState: SchemasState;
 }
 
 type SchemasReducer = (state: SchemasState, action: any) => SchemasState;
+
+/// shcema
+type SchemaState = Schema;
+
+interface SchemaAction {
+  type: any;
+  payload: SchemaInput;
+}
+
+interface SchemaInput {
+  name: "name" | "description" | "schemaAlias" | "definitionAlias";
+  value: string;
+}
+
+interface SchemaProvider {
+  children: React.ReactNode;
+  initialState: SchemaState;
+}
