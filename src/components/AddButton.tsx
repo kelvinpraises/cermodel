@@ -12,10 +12,7 @@ const Simg = styled.img`
 `;
 
 const AddButton = () => {
-  const [{ showSchemaDetails }, dispatch] = useContext(ModalContext) as [
-    ModalInitialState,
-    any
-  ];
+  const { dispatch } = useContext(ModalContext) as { dispatch: any };
 
   return (
     <div onClick={() => dispatch({ type: modalActions.OPEN_SCHEMA_MODAL })}>

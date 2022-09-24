@@ -1,12 +1,7 @@
-import React, {
-  useContext,
-  DispatchWithoutAction,
-  useEffect,
-  useRef,
-} from "react";
+import Editor from "@monaco-editor/react";
+import { useContext, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../state/modal";
-import Editor from "@monaco-editor/react";
 import toggleFullScreen from "../utils/fullscreen";
 
 const SBackground = styled.div`
@@ -51,10 +46,13 @@ const Simg = styled.img`
 `;
 
 const Zenmode = () => {
-  const [{ showZenMode }, dispatch] = useContext(ModalContext) as [
-    ModalInitialState,
-    any
-  ];
+  const {
+    state: { showZenMode },
+    dispatch,
+  } = useContext(ModalContext) as {
+    state: ModalInitialState;
+    dispatch: any;
+  };
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -62,10 +60,11 @@ const Zenmode = () => {
     if (showZenMode) {
       toggleFullScreen(ref);
     }
+
+    console.log(showZenMode);
   }, [showZenMode]);
 
   function handleEditorDidMount(editor: any, monaco: any) {
-    console.log("here is the monaco instance:", monaco);
     monaco.editor.defineTheme("my-dark", {
       base: "vs",
       inherit: true,
@@ -83,10 +82,6 @@ const Zenmode = () => {
     monaco.editor.setTheme("my-dark");
   }
 
-  function handleEditorChange(value: any, event: any) {
-    console.log(`here is the current model value: ${value}`);
-  }
-
   if (!showZenMode) {
     return null;
   }
@@ -97,9 +92,10 @@ const Zenmode = () => {
         <STitle>
           <Sp>EnvfyProtocolState</Sp>
           <Simg
-            onClick={() =>
-              dispatch({ type: modalActions.CLOSE_ZEN_MODE_MODAL })
-            }
+            onClick={() => {
+              toggleFullScreen(ref);
+              dispatch({ type: modalActions.CLOSE_ZEN_MODE_MODAL });
+            }}
             src="close.svg"
             alt=""
           />
@@ -108,7 +104,6 @@ const Zenmode = () => {
         <Editor
           height="90vh"
           defaultLanguage="javascript"
-          onChange={handleEditorChange}
           theme="my-dark"
           onMount={handleEditorDidMount}
           options={{

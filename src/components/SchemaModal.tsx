@@ -1,4 +1,4 @@
-import React, { useContext, DispatchWithoutAction } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../state/modal";
 import SaveChange from "./SaveChange";
@@ -83,24 +83,28 @@ const Simg = styled.img`
 `;
 
 const SchemaModal = () => {
-  const [{ showSchemaDetails }, dispatch] = useContext(ModalContext) as [
-    ModalInitialState,
-    any
-  ];
+  const {
+    state: { showSchemaDetails },
+    dispatch,
+  } = useContext(ModalContext) as {
+    state: ModalInitialState;
+    dispatch: any;
+  };
 
   if (!showSchemaDetails) {
     return null;
   }
 
   return (
-    <SModal
-      onClick={() => dispatch({ type: modalActions.CLOSE_SCHEMA_MODAL })}
-    >
+    <SModal onClick={() => dispatch({ type: modalActions.CLOSE_SCHEMA_MODAL })}>
       <SSchema onClick={(e) => e.stopPropagation()}>
         <SHeader>
           <Text type="h5">Schema Details</Text>
-            <Simg             onClick={() => dispatch({ type: modalActions.CLOSE_SCHEMA_MODAL })}
- src="close.svg" alt="" />
+          <Simg
+            onClick={() => dispatch({ type: modalActions.CLOSE_SCHEMA_MODAL })}
+            src="close.svg"
+            alt=""
+          />
         </SHeader>
         <SBody>
           <STitle>Name</STitle>

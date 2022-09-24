@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import Text from "../components/Text";
 import Card from "./Card";
-
 
 const SContainer = styled.div`
   display: flex;
@@ -23,8 +21,6 @@ const Sp = styled.p`
   color: ${({ theme }) => theme.text3};
   text-align: center;
 `;
-
-
 
 const CardColor = ["#34A853", "#1DA1F2", "#9B33C3", "#1877F2", "#0A66C2"];
 
@@ -119,4 +115,3 @@ const test = () => {
 };
 
 export default test;
-

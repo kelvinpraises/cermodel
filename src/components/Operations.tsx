@@ -1,4 +1,4 @@
-import React, { useContext, DispatchWithoutAction } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../state/modal";
 
@@ -41,9 +41,7 @@ const SDownload = styled.div`
 `;
 
 const Operations = () => {
-  const [{ showWelcome, showDownload, showSettings }, dispatch] = useContext(
-    ModalContext
-  ) as [ModalInitialState, any];
+  const { dispatch } = useContext(ModalContext) as { dispatch: any };
 
   return (
     <SBox>

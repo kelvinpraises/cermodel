@@ -1,4 +1,4 @@
-import React, { useContext, DispatchWithoutAction } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../state/modal";
 import Text from "./Text";
@@ -51,10 +51,13 @@ const Simg = styled.img`
 const SBody = styled.div``;
 
 const WelcomeModal = () => {
-  const [{ showWelcome }, dispatch] = useContext(ModalContext) as [
-    ModalInitialState,
-    any
-  ];
+  const {
+    state: { showWelcome },
+    dispatch,
+  } = useContext(ModalContext) as {
+    state: ModalInitialState;
+    dispatch: any;
+  };
 
   if (!showWelcome) {
     return null;

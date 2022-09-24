@@ -1,4 +1,4 @@
-import React, { useContext, DispatchWithoutAction } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../state/modal";
 import SaveChange from "./SaveChange";
@@ -144,10 +144,13 @@ const Sp = styled.p`
 `;
 
 const Settings = () => {
-  const [{ showSettings }, dispatch] = useContext(ModalContext) as [
-    ModalInitialState,
-    any
-  ];
+  const {
+    state: { showSettings },
+    dispatch,
+  } = useContext(ModalContext) as {
+    state: ModalInitialState;
+    dispatch: any;
+  };
 
   if (!showSettings) {
     return null;

@@ -1,8 +1,7 @@
-import React, { useContext, DispatchWithoutAction, useRef } from "react";
 import Editor from "@monaco-editor/react";
+import { useContext } from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../state/modal";
-import toggleFullScreen from "../utils/fullscreen";
 
 const SEditorRest = styled.div`
   width: 25rem;
@@ -79,9 +78,8 @@ const CerEditor = () => {
     console.log(`here is the current model value: ${value}`);
   }
 
-  const [_, dispatch] = useContext(ModalContext);
+  const { dispatch } = useContext(ModalContext) as { dispatch: any };
 
-  // const show = false;
   const show = false;
 
   return (
@@ -112,6 +110,7 @@ const CerEditor = () => {
             <Simg
               onClick={() => {
                 dispatch({ type: modalActions.OPEN_ZEN_MODE_MODAL });
+                console.log("click");
               }}
               src="zenmode.svg"
               alt=""

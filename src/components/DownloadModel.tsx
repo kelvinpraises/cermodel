@@ -1,4 +1,4 @@
-import React, { useContext, DispatchWithoutAction } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../state/modal";
 import Text from "./Text";
@@ -153,10 +153,13 @@ const SModelHead = styled.div`
 `;
 
 const DownloadModel = () => {
-  const [{ showDownload }, dispatch] = useContext(ModalContext) as [
-    ModalInitialState,
-    any
-  ];
+  const {
+    state: { showDownload },
+    dispatch,
+  } = useContext(ModalContext) as {
+    state: ModalInitialState;
+    dispatch: any;
+  };
 
   if (!showDownload) {
     return null;

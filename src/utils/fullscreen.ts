@@ -18,6 +18,7 @@ export default function toggleFullScreen(ref: MutableRefObject<HTMLDivElement | 
     !doc.msFullscreenElement
   ) {
     requestFullScreen?.call(docEl);
+    // alert("open")
   } else {
     cancelFullScreen.call(doc);
   }

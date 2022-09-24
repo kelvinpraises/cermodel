@@ -5,7 +5,6 @@ import AddButton from "../components/AddButton";
 import CerEditor from "../components/CerEditor";
 import Operations from "../components/Operations";
 import Stack from "../components/Stack";
-import Zenmode from "../components/Zenmode";
 
 const SContainer = styled.div`
   width: 100%;
@@ -25,10 +24,9 @@ const Home: NextPage = () => {
       </Head>
 
       <SContainer>
-        {/* <Zenmode /> */}
-        <CerEditor></CerEditor>
+        <CerEditor />
         <AddButton />
-        <Stack></Stack>
+        <Stack />
         <Operations />
       </SContainer>
     </div>
