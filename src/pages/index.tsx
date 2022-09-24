@@ -1,6 +1,11 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import styled from "styled-components";
+import AddButton from "../components/AddButton";
+import CerEditor from "../components/CerEditor";
+import Operations from "../components/Operations";
+import Stack from "../components/Stack";
+import Zenmode from "../components/Zenmode";
 
 const SContainer = styled.div`
   width: 100%;
@@ -8,7 +13,6 @@ const SContainer = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  flex-direction: column;
 `;
 
 const Home: NextPage = () => {
@@ -20,7 +24,13 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <SContainer></SContainer>
+      <SContainer>
+        {/* <Zenmode /> */}
+        <CerEditor></CerEditor>
+        <AddButton />
+        <Stack></Stack>
+        <Operations />
+      </SContainer>
     </div>
   );
 };

@@ -7,14 +7,12 @@ declare module "styled-components" {
 
 interface INewTheme {
   background: string;
-  nav: string;
-  donation: string;
-  primary: string;
+  card: string;
+  cardBorder: string;
+  inputField: string;
   accent1: string;
   accent2: string;
   accent3: string;
-  accent4: string;
-  accent5: string;
   text1: string;
   text2: string;
   text3: string;

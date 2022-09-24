@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
-import Navigation from "./Navigation";
 import styled from "styled-components";
-import AuthModal from "./Modal";
-import AddContactModal from "./AddContactModal";
+import DownloadModel from "./DownloadModel";
+import SchemaModal from "./SchemaModal";
+import Settings from "./Setting";
+import WelcomeModal from "./WelcomeModal";
+import Zenmode from "./Zenmode";
 
 interface IScaffoldProp {
   children: React.ReactNode;
@@ -19,10 +20,12 @@ const SContainer = styled.div`
 const Scaffold: React.FC<IScaffoldProp> = ({ children }) => {
   return (
     <SScaffold>
-      <Navigation />
       <SContainer>{children}</SContainer>
-      <AuthModal />
-      <AddContactModal />
+      <WelcomeModal />
+      <SchemaModal />
+      <Zenmode />
+      <Settings />
+      <DownloadModel />
     </SScaffold>
   );
 };
