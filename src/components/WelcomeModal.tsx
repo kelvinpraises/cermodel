@@ -55,7 +55,7 @@ const WelcomeModal = () => {
     state: { showWelcome },
     dispatch,
   } = useContext(ModalContext) as {
-    state: ModalInitialState;
+    state: ModalState;
     dispatch: any;
   };
 

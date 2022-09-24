@@ -1,4 +1,4 @@
-interface ModalInitialState {
+interface ModalState {
   showSettings: boolean;
   showWelcome: boolean;
   showZenMode: boolean;
@@ -8,10 +8,10 @@ interface ModalInitialState {
 
 interface ModalProvider {
   children: React.ReactNode;
-  initialState: ModalInitialState;
+  initialState: ModalState;
 }
 
 type ModalReducer = (
-  state: ModalInitialState,
+  state: ModalState,
   action: any
-) => ModalInitialState;
+) => ModalState;

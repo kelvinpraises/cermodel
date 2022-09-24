@@ -143,12 +143,19 @@ const Sp = styled.p`
   font-size: 1rem;
 `;
 
+const Simg = styled.img`
+  transition: 100ms;
+  :hover {
+    transform: scale(1.05);
+  }
+`;
+
 const Settings = () => {
   const {
     state: { showSettings },
     dispatch,
   } = useContext(ModalContext) as {
-    state: ModalInitialState;
+    state: ModalState;
     dispatch: any;
   };
 
@@ -163,11 +170,13 @@ const Settings = () => {
       <SSchema onClick={(e) => e.stopPropagation()}>
         <SHeader>
           <Text type="h5">Settings</Text>
-          <SClose
-            onClick={() => dispatch({ type: modalActions.CLOSE_SETTING_MODAL })}
-          >
-            <img src="close.svg" alt="" />
-          </SClose>
+            <Simg
+              onClick={() =>
+                dispatch({ type: modalActions.CLOSE_SETTING_MODAL })
+              }
+              src="close.svg"
+              alt=""
+            />
         </SHeader>
         <SBody>
           <STitle>DID Seed Key</STitle>

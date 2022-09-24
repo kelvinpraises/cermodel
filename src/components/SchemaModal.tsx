@@ -87,7 +87,7 @@ const SchemaModal = () => {
     state: { showSchemaDetails },
     dispatch,
   } = useContext(ModalContext) as {
-    state: ModalInitialState;
+    state: ModalState;
     dispatch: any;
   };
 

@@ -39,18 +39,6 @@ const SHeader = styled.div`
   justify-content: space-between;
 `;
 
-const SClose = styled.div`
-  width: 3rem;
-  height: 3rem;
-  display: grid;
-  place-items: center;
-  border-radius: 0.5rem;
-  transition: 200ms ease-in-out;
-  :hover {
-    background: ${({ theme }) => theme.accent1};
-  }
-`;
-
 const SBody = styled.div`
   height: calc(90vh - 5rem);
   /* padding: 0 2rem; */
@@ -152,12 +140,19 @@ const SModelHead = styled.div`
   justify-content: space-between;
 `;
 
+const Simg = styled.img`
+  transition: 100ms;
+  :hover {
+    transform: scale(1.05);
+  }
+`;
+
 const DownloadModel = () => {
   const {
     state: { showDownload },
     dispatch,
   } = useContext(ModalContext) as {
-    state: ModalInitialState;
+    state: ModalState;
     dispatch: any;
   };
 
@@ -172,13 +167,13 @@ const DownloadModel = () => {
       <SSchema onClick={(e) => e.stopPropagation()}>
         <SHeader>
           <Text type="h5">Model</Text>
-          <SClose
-            onClick={() =>
-              dispatch({ type: modalActions.CLOSE_DOWNLOAD_MODAL })
-            }
-          >
-            <img src="close.svg" alt="" />
-          </SClose>
+            <Simg
+              onClick={() =>
+                dispatch({ type: modalActions.CLOSE_DOWNLOAD_MODAL })
+              }
+              src="close.svg"
+              alt=""
+            />
         </SHeader>
         <SBody>
           <SSchemaDetails>

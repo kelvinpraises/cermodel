@@ -1,78 +1,79 @@
 import { createContext, useReducer } from "react";
 
-const reducer: ModalReducer = (state: ModalInitialState, action: any) => {
-  let type: ModalInitialState;
+const reducer: ModalReducer = (state: ModalState, action: any) => {
+  let newState: ModalState;
+  
   switch (action.type) {
     case modalActions.OPEN_SETTING_MODAL:
-      type = {
+      newState = {
         ...state,
         showSettings: true,
       };
       break;
     case modalActions.CLOSE_SETTING_MODAL:
-      type = {
+      newState = {
         ...state,
         showSettings: false,
       };
       break;
 
     case modalActions.OPEN_WELCOME_MODAL:
-      type = {
+      newState = {
         ...state,
         showWelcome: true,
       };
       break;
     case modalActions.CLOSE_WELCOME_MODAL:
-      type = {
+      newState = {
         ...state,
         showWelcome: false,
       };
       break;
 
     case modalActions.OPEN_ZEN_MODE_MODAL:
-      type = {
+      newState = {
         ...state,
         showZenMode: true,
       };
       break;
     case modalActions.CLOSE_ZEN_MODE_MODAL:
-      type = {
+      newState = {
         ...state,
         showZenMode: false,
       };
       break;
 
     case modalActions.OPEN_SCHEMA_MODAL:
-      type = {
+      newState = {
         ...state,
         showSchemaDetails: true,
       };
       break;
     case modalActions.CLOSE_SCHEMA_MODAL:
-      type = {
+      newState = {
         ...state,
         showSchemaDetails: false,
       };
       break;
 
     case modalActions.OPEN_DOWNLOAD_MODAL:
-      type = {
+      newState = {
         ...state,
         showDownload: true,
       };
       break;
     case modalActions.CLOSE_DOWNLOAD_MODAL:
-      type = {
+      newState = {
         ...state,
         showDownload: false,
       };
       break;
 
     default:
-      type = state;
+      newState = state;
   }
 
-  return type;
+  return newState;
 };
 
 export const ModalContext = createContext<any>(undefined);

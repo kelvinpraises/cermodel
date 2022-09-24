@@ -1,5 +1,5 @@
 import type { AppProps } from "next/app";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ThemeProvider } from "styled-components";
 import Scaffold from "../components/Scaffold";
 import { ModalProvider } from "../state/modal";
@@ -8,10 +8,10 @@ import GlobalStyle from "../styles/global";
 import { darkTheme, lightTheme } from "../theme/theme";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const modalInitialState = useCallback(() => {
+  const ModalState = useMemo(() => {
     const newUser = false;
 
-    let state: ModalInitialState;
+    let state: ModalState;
     const data = {
       showSettings: false,
       showWelcome: false,
@@ -31,9 +31,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     return state;
   }, []);
 
-  const schemaInitialState = useCallback(() => {
+  const SchemaState = useMemo(() => {
     const db = true;
-    let state: SchemaInitialState;
+    let state: SchemaState;
 
     if (db) {
       state = [];
@@ -47,8 +47,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [theme] = useState("dark");
 
   return (
-    <ModalProvider initialState={modalInitialState()}>
-      <SchemaProvider initialState={schemaInitialState()}>
+    <ModalProvider initialState={ModalState}>
+      <SchemaProvider initialState={SchemaState}>
         <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
           <GlobalStyle />
           <Scaffold>

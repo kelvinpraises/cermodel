@@ -50,7 +50,7 @@ const Zenmode = () => {
     state: { showZenMode },
     dispatch,
   } = useContext(ModalContext) as {
-    state: ModalInitialState;
+    state: ModalState;
     dispatch: any;
   };
 

@@ -1,16 +1,17 @@
-import { INewTheme } from "./new-theme";
+import { INewTheme } from "../types/theme";
+
 
 export const lightTheme: INewTheme = {
   background: "#111528",
-  card: "#24283B",  //cards
-  cardBorder: "#1D2231",  //and for all lines
+  card: "#24283B", //cards
+  cardBorder: "#1D2231", //and for all lines
   inputField: "#414968",
-  accent1: "#191A21", //almost black color 
-  accent2: "#81CC2A", //green color  
-  accent3: "#000000", 
+  accent1: "#191A21", //almost black color
+  accent2: "#81CC2A", //green color
+  accent3: "#000000",
   text1: "#ffffff",
   text2: "#EBF2F8",
-  text3: "#BDD3E8",   
+  text3: "#BDD3E8",
   border: "#A592F2",
   borderHover: "#",
   modal: "#262B3D", //all modals
@@ -21,15 +22,15 @@ export const lightTheme: INewTheme = {
 
 export const darkTheme: INewTheme = {
   background: "#111528",
-  card: "#24283B",  //cards
-  cardBorder: "#1D2231",  //and for all lines
+  card: "#24283B", //cards
+  cardBorder: "#1D2231", //and for all lines
   inputField: "#414968",
-  accent1: "#191A21", //almost black color 
-  accent2: "#81CC2A", //green color  
-  accent3: "#000000", 
+  accent1: "#191A21", //almost black color
+  accent2: "#81CC2A", //green color
+  accent3: "#000000",
   text1: "#ffffff",
   text2: "#EBF2F8",
-  text3: "#BDD3E8",   
+  text3: "#BDD3E8",
   border: "#A592F2",
   borderHover: "#",
   modal: "#262B3D", //all modals
@@ -38,4 +39,4 @@ export const darkTheme: INewTheme = {
   dark: true,
 };
 
-export type ThemeType = typeof lightTheme;
+export type ThemeType = typeof darkTheme;
