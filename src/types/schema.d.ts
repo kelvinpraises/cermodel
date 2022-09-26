@@ -36,7 +36,10 @@ type SchemaState = Schema;
 
 interface SchemaAction {
   type: any;
-  payload: SchemaInput;
+  inputPayload?: SchemaInput;
+  idPayload?: string;
+  borderPayload?: string;
+  schemaPayload?: Schema;
 }
 
 interface SchemaInput {

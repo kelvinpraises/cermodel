@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import Text from "./Text";
 
@@ -27,7 +28,7 @@ const SSave = styled.div`
   cursor: pointer;
 `;
 
-const SDiscard = styled.div`
+const SReset = styled.div`
   width: 4rem;
   height: 1.85rem;
   margin-right: 1rem;
@@ -47,15 +48,45 @@ const SBox1 = styled.div`
   user-select: none;
 `;
 
-const SaveChange = () => {
+const SaveChange = ({
+  state,
+  saveChanges,
+  resetChanges,
+}: {
+  state: any;
+  saveChanges: (state: any) => void;
+  resetChanges: (state: any) => void;
+}) => {
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    setSaved(false);
+  }, [state]);
+
+  const memoState = useMemo(() => state, []);
+
+  const handleSave = useCallback(() => {
+    saveChanges(state);
+    setSaved(true);
+  }, [state]);
+
+  const handleReset = useCallback(() => {
+    resetChanges(memoState);
+    setSaved(true);
+  }, [memoState]);
+
+  if (JSON.stringify(state) === JSON.stringify(memoState) || saved) {
+    return null;
+  }
+
   return (
     <SBox>
       <Text>Save changes?</Text>
       <SBox1>
-        <SDiscard>
+        <SReset onClick={() => handleReset()}>
           <Sp>Reset</Sp>
-        </SDiscard>
-        <SSave>
+        </SReset>
+        <SSave onClick={() => handleSave()}>
           <Sp>Save</Sp>
         </SSave>
       </SBox1>

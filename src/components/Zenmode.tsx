@@ -60,8 +60,6 @@ const Zenmode = () => {
     if (showZenMode) {
       toggleFullScreen(ref);
     }
-
-    console.log(showZenMode);
   }, [showZenMode]);
 
   function handleEditorDidMount(editor: any, monaco: any) {

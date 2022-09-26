@@ -3,8 +3,32 @@ import { createContext, useReducer } from "react";
 const reducer = (state: SchemaState, action: SchemaAction) => {
   let newState: SchemaState;
   switch (action.type) {
+    case schemaActions.SET_ID:
+      newState = {
+        ...state,
+        id: action.idPayload!,
+      };
+      break;
+
+    case schemaActions.SET_BORDER_COLOR:
+      newState = {
+        ...state,
+        borderColor: action.borderPayload!,
+      };
+      break;
+
     case schemaActions.CHANGE_INPUT:
-      newState = { ...state, [action.payload.name]: action.payload.value };
+      newState = {
+        ...state,
+        schemaDetails: {
+          ...state.schemaDetails,
+          [action.inputPayload!.name]: action.inputPayload!.value,
+        },
+      };
+      break;
+
+    case schemaActions.PUT_STATE:
+      newState = action.schemaPayload!;
       break;
 
     case schemaActions.CLEAR_STATE:
@@ -44,6 +68,9 @@ export const SchemaProvider: React.FC<SchemaProvider> = ({
 };
 
 export const schemaActions = {
+  SET_ID: "SET_ID",
+  SET_BORDER_COLOR: "SET_BORDER_COLOR",
   CHANGE_INPUT: "CHANGE_INPUT",
+  PUT_STATE: "PUT_STATE",
   CLEAR_STATE: "CLEAR_STATE",
 };

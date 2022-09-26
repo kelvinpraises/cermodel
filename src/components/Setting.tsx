@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../state/modals";
 import SaveChange from "./SaveChange";
@@ -159,6 +159,7 @@ const Settings = () => {
     dispatch: any;
   };
 
+
   if (!showSettings) {
     return null;
   }
@@ -170,13 +171,11 @@ const Settings = () => {
       <SSchema onClick={(e) => e.stopPropagation()}>
         <SHeader>
           <Text type="h5">Settings</Text>
-            <Simg
-              onClick={() =>
-                dispatch({ type: modalActions.CLOSE_SETTING_MODAL })
-              }
-              src="close.svg"
-              alt=""
-            />
+          <Simg
+            onClick={() => dispatch({ type: modalActions.CLOSE_SETTING_MODAL })}
+            src="close.svg"
+            alt=""
+          />
         </SHeader>
         <SBody>
           <STitle>DID Seed Key</STitle>
@@ -202,7 +201,7 @@ const Settings = () => {
             </SSwitch>
           </SFlex>
         </SBody>
-        <SaveChange />
+        {/* <SaveChange state={undefined} saveChanges={} resetChanges={} /> */}
       </SSchema>
     </SModal>
   );

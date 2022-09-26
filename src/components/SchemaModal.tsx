@@ -1,6 +1,14 @@
-import { useContext } from "react";
+import {
+  ChangeEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+} from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../state/modals";
+import { schemaActions, SchemaContext } from "../state/schema";
+import { schemasActions, SchemasContext } from "../state/schemas";
 import SaveChange from "./SaveChange";
 import Text from "./Text";
 
@@ -83,40 +91,120 @@ const Simg = styled.img`
 `;
 
 const SchemaModal = () => {
-  const {
-    state: { showSchemaDetails },
-    dispatch,
-  } = useContext(ModalContext) as {
-    state: ModalState;
-    dispatch: any;
-  };
+  const { state: modalState, dispatch: modalDispatch } = useContext(
+    ModalContext
+  ) as { state: ModalState; dispatch: any };
 
-  if (!showSchemaDetails) {
+  const { state: schemaState, dispatch: schemaDispatch } = useContext(
+    SchemaContext
+  ) as { state: SchemaState; dispatch: (x: SchemaAction) => any };
+
+  const { state: schemasState, dispatch: schemasDispatch } = useContext(
+    SchemasContext
+  ) as { state: SchemasState; dispatch: any };
+
+  const cardColor = ["#34A853", "#1DA1F2", "#9B33C3", "#1877F2", "#0A66C2"];
+
+  useEffect(() => {
+    const randNum = (x: number) => Math.floor(Math.random() * x);
+    const randColor = cardColor[randNum(cardColor.length - 1)];
+
+    schemaDispatch({
+      type: schemaActions.SET_ID,
+      idPayload: "" + randNum(100000000),
+    });
+
+    schemaDispatch({
+      type: schemaActions.SET_BORDER_COLOR,
+      borderPayload: randColor,
+    });
+  }, []);
+
+  const handleInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    schemaDispatch({
+      type: schemaActions.CHANGE_INPUT,
+      inputPayload: {
+        name: e.target.name,
+        value: e.target.value,
+      } as SchemaInput,
+    });
+  }, []);
+
+  const handleModalClose = useCallback(() => {
+    modalDispatch({ type: modalActions.CLOSE_SCHEMA_MODAL });
+    schemaDispatch({ type: schemaActions.CLEAR_STATE });
+  }, []);
+
+  const handleSaveChanges = useCallback((state: SchemaState) => {
+    modalDispatch({ type: modalActions.CLOSE_SCHEMA_MODAL });
+    schemaDispatch({ type: schemaActions.CLEAR_STATE });
+
+    const isNewSchema = schemasState.schemas.findIndex(
+      (e) => e.id === state.id
+    );
+
+    if (isNewSchema === -1) {
+      schemasDispatch({
+        type: schemasActions.CREATE_SCHEMA,
+        payload: state ,
+      });
+    } else {
+      schemasDispatch({ type: schemasActions.UPDATE_SCHEMA });
+    }
+  }, []);
+
+  const handleReset = useCallback(() => {
+    schemaDispatch({ type: schemaActions.CLEAR_STATE });
+  }, []);
+
+  if (!modalState.showSchemaDetails) {
     return null;
   }
 
   return (
-    <SModal onClick={() => dispatch({ type: modalActions.CLOSE_SCHEMA_MODAL })}>
+    <SModal onClick={handleModalClose}>
       <SSchema onClick={(e) => e.stopPropagation()}>
         <SHeader>
           <Text type="h5">Schema Details</Text>
-          <Simg
-            onClick={() => dispatch({ type: modalActions.CLOSE_SCHEMA_MODAL })}
-            src="close.svg"
-            alt=""
-          />
+          <Simg onClick={handleModalClose} src="close.svg" alt="" />
         </SHeader>
+
         <SBody>
           <STitle>Name</STitle>
-          <SInput></SInput>
+          <SInput
+            type="text"
+            value={schemaState.schemaDetails.name}
+            onChange={handleInputChange}
+            name="name"
+          />
           <STitle>Description</STitle>
-          <SInput></SInput>
+          <SInput
+            type="text"
+            value={schemaState.schemaDetails.description}
+            onChange={handleInputChange}
+            name="description"
+          />
           <STitle>Schema Alias</STitle>
-          <SInput></SInput>
+          <SInput
+            type="text"
+            value={schemaState.schemaDetails.schemaAlias}
+            onChange={handleInputChange}
+            name="schemaAlias"
+          />
           <STitle>Definition Alias</STitle>
-          <SInput></SInput>
+          <SInput
+            type="text"
+            value={schemaState.schemaDetails.definitionAlias}
+            onChange={handleInputChange}
+            name="definitionAlias"
+          />
         </SBody>
-        <SaveChange />
+
+        <SaveChange
+          state={schemaState}
+          saveChanges={(state) => handleSaveChanges(state)}
+          resetChanges={() => handleReset()}
+        />
       </SSchema>
     </SModal>
   );

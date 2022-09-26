@@ -3,12 +3,13 @@ import { useMemo, useState } from "react";
 import { ThemeProvider } from "styled-components";
 import Scaffold from "../components/Scaffold";
 import { ModalProvider } from "../state/modals";
+import { SchemaProvider } from "../state/schema";
 import { SchemasProvider } from "../state/schemas";
 import GlobalStyle from "../styles/global";
 import { darkTheme, lightTheme } from "../theme/theme";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const ModalState = useMemo(() => {
+  const modalState = useMemo(() => {
     const newUser = false;
 
     let state: ModalState;
@@ -31,7 +32,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     return state;
   }, []);
 
-  const SchemasState = useMemo(() => {
+  const schemasState = useMemo(() => {
     const db = true;
     let state: SchemasState;
 
@@ -44,17 +45,31 @@ function MyApp({ Component, pageProps }: AppProps) {
     return state;
   }, []);
 
+  const schemaState = {
+    id: "",
+    schema: "",
+    schemaDetails: {
+      name: "",
+      description: "",
+      schemaAlias: "",
+      definitionAlias: "",
+    },
+    borderColor: "",
+  };
+
   const [theme] = useState("dark");
 
   return (
-    <ModalProvider initialState={ModalState}>
-      <SchemasProvider initialState={SchemasState}>
-        <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
-          <GlobalStyle />
-          <Scaffold>
-            <Component {...pageProps} />
-          </Scaffold>
-        </ThemeProvider>
+    <ModalProvider initialState={modalState}>
+      <SchemasProvider initialState={schemasState}>
+        <SchemaProvider initialState={schemaState}>
+          <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
+            <GlobalStyle />
+            <Scaffold>
+              <Component {...pageProps} />
+            </Scaffold>
+          </ThemeProvider>
+        </SchemaProvider>
       </SchemasProvider>
     </ModalProvider>
   );

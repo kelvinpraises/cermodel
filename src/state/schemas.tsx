@@ -53,7 +53,7 @@ const reducer: SchemasReducer = (
   return newState;
 };
 
-export const SchemasContexts = createContext<any>(undefined);
+export const SchemasContext = createContext<any>(undefined);
 
 export const SchemasProvider: React.FC<SchemasProvider> = ({
   children,
@@ -62,9 +62,9 @@ export const SchemasProvider: React.FC<SchemasProvider> = ({
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
-    <SchemasContexts.Provider value={{ state, dispatch }}>
+    <SchemasContext.Provider value={{ state, dispatch }}>
       {children}
-    </SchemasContexts.Provider>
+    </SchemasContext.Provider>
   );
 };
 
