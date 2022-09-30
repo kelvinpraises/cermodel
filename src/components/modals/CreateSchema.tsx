@@ -105,8 +105,7 @@ const CreateSchema: React.FC = () => {
     modalDispatch: any;
   };
 
-  const { schemaState, schemaDispatch } = useContext(SchemaContext) as {
-    schemaState: SchemaState;
+  const { schemaDispatch } = useContext(SchemaContext) as {
     schemaDispatch: (x: SchemaAction) => any;
   };
 

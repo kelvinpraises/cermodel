@@ -95,8 +95,7 @@ const UpdateSchema: React.FC<IUpdateSchema> = ({ initialState }) => {
     modalDispatch: any;
   };
 
-  const { schemaState, schemaDispatch } = useContext(SchemaContext) as {
-    schemaState: SchemaState;
+  const { schemaDispatch } = useContext(SchemaContext) as {
     schemaDispatch: (x: SchemaAction) => any;
   };
 
@@ -126,7 +125,7 @@ const UpdateSchema: React.FC<IUpdateSchema> = ({ initialState }) => {
       });
       setSchemaInputState(initialState);
     },
-    [initialState, schemaState, modalActions]
+    [initialState, modalActions]
   );
 
   const handleReset = useCallback(() => {
