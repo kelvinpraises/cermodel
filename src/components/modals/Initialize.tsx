@@ -15,7 +15,7 @@ const SModal = styled.div`
   z-index: 2000;
 `;
 
-const SWelcome = styled.div`
+const SInitialize = styled.div`
   display: flex;
   flex-direction: column;
   width: 27rem;
@@ -50,7 +50,7 @@ const Simg = styled.img`
 
 const SBody = styled.div``;
 
-const WelcomeModal = () => {
+const Initialize = () => {
   const { modalState, modalDispatch } = useContext(ModalContext) as {
     modalState: ModalState;
     modalDispatch: any;
@@ -66,16 +66,16 @@ const WelcomeModal = () => {
 
   return (
     <SModal onClick={handleClose}>
-      <SWelcome onClick={(e) => e.stopPropagation()}>
+      <SInitialize onClick={(e) => e.stopPropagation()}>
         <SHeader>
           <Simg onClick={handleClose} src="close.svg" alt="" />
           <Text type="h5">Welcome</Text>
           <Sp>Next</Sp>
         </SHeader>
         <SBody></SBody>
-      </SWelcome>
+      </SInitialize>
     </SModal>
   );
 };
 
-export default WelcomeModal;
+export default Initialize;
