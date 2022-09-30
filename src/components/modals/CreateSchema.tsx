@@ -5,10 +5,6 @@ import { schemaActions, SchemaContext } from "../../state/schema";
 import Text from "../Text";
 import SaveChange from "./SaveChange";
 
-interface ISchemaDetailsProps {
-  initialState?: Schema;
-}
-
 const SModal = styled.div`
   position: fixed;
   left: 0;
@@ -89,7 +85,7 @@ const Simg = styled.img`
 
 const cardColor = ["#34A853", "#1DA1F2", "#9B33C3", "#1877F2", "#0A66C2"];
 
-const defaultProp = {
+const defaultProps = {
   id: "",
   schema: "",
   schemaDetails: {
@@ -101,10 +97,8 @@ const defaultProp = {
   borderColor: "",
 };
 
-const SchemaDetails: React.FC<ISchemaDetailsProps> = ({
-  initialState = defaultProp,
-}) => {
-  const [schemaInputState, setSchemaInputState] = useState(initialState);
+const CreateSchema: React.FC = () => {
+  const [schemaInputState, setSchemaInputState] = useState(defaultProps);
 
   const { modalState, modalDispatch } = useContext(ModalContext) as {
     modalState: ModalState;
@@ -130,49 +124,36 @@ const SchemaDetails: React.FC<ISchemaDetailsProps> = ({
 
   const handleModalClose = useCallback(() => {
     modalDispatch({ type: modalActions.CLOSE_SCHEMA_MODAL });
-    setSchemaInputState(initialState);
-  }, [initialState, modalActions]);
+    setSchemaInputState(defaultProps);
+  }, [defaultProps, modalActions]);
 
   const handleSaveChanges = useCallback(
     (state: Schema) => {
       modalDispatch({ type: modalActions.CLOSE_SCHEMA_MODAL });
-      setSchemaInputState(initialState);
+      setSchemaInputState(defaultProps);
 
-      const isNewSchema = schemaState.schemas.findIndex(
-        (e) => e.id === state.id
-      );
+      const randNum = (x: number) => Math.floor(Math.random() * x);
+      const randColor = cardColor[randNum(cardColor.length - 1)];
 
-      if (isNewSchema === -1) {
-        const randNum = (x: number) => Math.floor(Math.random() * x);
-        const randColor = cardColor[randNum(cardColor.length - 1)];
+      state.id = "" + randNum(100000000);
 
-        state.id = "" + randNum(100000000);
+      state.borderColor = randColor;
 
-        state.borderColor = randColor;
-
-        schemaDispatch({
-          type: schemaActions.CREATE_SCHEMA,
-          payload: {
-            schema: state,
-          },
-        });
-      } else {
-        schemaDispatch({
-          type: schemaActions.UPDATE_SCHEMA_DETAILS,
-          payload: {
-            schema: state,
-          },
-        });
-      }
+      schemaDispatch({
+        type: schemaActions.CREATE_SCHEMA,
+        payload: {
+          schema: state,
+        },
+      });
     },
-    [initialState, schemaState, modalActions]
+    [defaultProps, modalActions]
   );
 
   const handleReset = useCallback(() => {
-    setSchemaInputState(initialState);
-  }, [initialState]);
+    setSchemaInputState(defaultProps);
+  }, [defaultProps]);
 
-  if (!modalState.showSchemaDetails) {
+  if (!modalState.showCreateSchema) {
     return null;
   }
 
@@ -229,4 +210,4 @@ const SchemaDetails: React.FC<ISchemaDetailsProps> = ({
   );
 };
 
-export default SchemaDetails;
+export default CreateSchema;

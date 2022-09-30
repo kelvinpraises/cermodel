@@ -17,7 +17,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       showSettings: false,
       showWelcome: false,
       showZenMode: false,
-      showSchemaDetails: false,
+      showCreateSchema: false,
+      showUpdateSchema: false,
       showDownload: false,
     };
 

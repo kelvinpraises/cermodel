@@ -4,7 +4,7 @@ import styled from "styled-components";
 import theme from "../../public/monaco-theme.json";
 import { modalActions, ModalContext } from "../state/modal";
 import { schemaActions, SchemaContext } from "../state/schema";
-import CreateSchema from "./modals/SchemaDetails";
+import CreateSchema from "./modals/CreateSchema";
 
 const SEditorRest = styled.div`
   width: 25rem;

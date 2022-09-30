@@ -2,7 +2,8 @@ interface ModalState {
   showSettings: boolean;
   showWelcome: boolean;
   showZenMode: boolean;
-  showSchemaDetails: boolean;
+  showCreateSchema: boolean;
+  showUpdateSchema: boolean;
   showDownload: boolean;
 }
 
@@ -11,7 +12,4 @@ interface ModalProvider {
   initialState: ModalState;
 }
 
-type ModalReducer = (
-  state: ModalState,
-  action: any
-) => ModalState;
+type ModalReducer = (state: ModalState, action: any) => ModalState;

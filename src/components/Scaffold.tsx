@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import CreateSchema from "./modals/SchemaDetails";
+import CreateSchema from "./modals/CreateSchema";
 import Downloader from "./modals/Downloader";
 import Initialize from "./modals/Initialize";
 import Settings from "./modals/Settings";
