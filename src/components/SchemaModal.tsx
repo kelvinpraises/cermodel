@@ -95,12 +95,7 @@ const SchemaModal = () => {
     schemaState: SchemaState;
     schemaDispatch: (x: SchemaAction) => any;
   };
-
-  const { schemasState, schemasDispatch } = useContext(SchemasContext) as {
-    schemasState: SchemasState;
-    schemasDispatch: any;
-  };
-
+  
   useEffect(() => {
     const randNum = (x: number) => Math.floor(Math.random() * x);
     const randColor = cardColor[randNum(cardColor.length - 1)];
