@@ -40,6 +40,7 @@ interface SchemaAction {
   idPayload?: string;
   borderPayload?: string;
   schemaPayload?: Schema;
+  
 }
 
 interface SchemaInput {

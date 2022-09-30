@@ -1,6 +1,6 @@
 import { createContext, useReducer } from "react";
 
-const reducer: ModalReducer = (state: ModalState, action: any) => {
+const reducer: ModalReducer = (state, action) => {
   let newState: ModalState;
 
   switch (action.type) {

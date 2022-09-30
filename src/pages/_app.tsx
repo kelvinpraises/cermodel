@@ -5,6 +5,7 @@ import Scaffold from "../components/Scaffold";
 import { ModalProvider } from "../state/modals";
 import { SchemaProvider } from "../state/schema";
 import { SchemasProvider } from "../state/schemas";
+import { SettingsProvider } from "../state/settings";
 import GlobalStyle from "../styles/global";
 import { darkTheme, lightTheme } from "../theme/theme";
 
@@ -57,20 +58,28 @@ function MyApp({ Component, pageProps }: AppProps) {
     borderColor: "",
   };
 
+  const settingsState = {
+    didSeedKey: "",
+    ceramicNode: "",
+    serverEndpoint: "",
+  };
+
   const [theme] = useState("dark");
 
   return (
     <ModalProvider initialState={modalState}>
-      <SchemasProvider initialState={schemasState}>
-        <SchemaProvider initialState={schemaState}>
-          <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
-            <GlobalStyle />
-            <Scaffold>
-              <Component {...pageProps} />
-            </Scaffold>
-          </ThemeProvider>
-        </SchemaProvider>
-      </SchemasProvider>
+      <SettingsProvider initialState={settingsState}>
+        <SchemasProvider initialState={schemasState}>
+          <SchemaProvider initialState={schemaState}>
+            <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
+              <GlobalStyle />
+              <Scaffold>
+                <Component {...pageProps} />
+              </Scaffold>
+            </ThemeProvider>
+          </SchemaProvider>
+        </SchemasProvider>
+      </SettingsProvider>
     </ModalProvider>
   );
 }
