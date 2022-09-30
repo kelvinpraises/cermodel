@@ -1,4 +1,10 @@
-import { ChangeEvent, useCallback, useContext, useState } from "react";
+import {
+  ChangeEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../../state/modal";
 import { schemaActions, SchemaContext } from "../../state/schema";
@@ -89,6 +95,10 @@ const Simg = styled.img`
 
 const UpdateSchema: React.FC<IUpdateSchema> = ({ initialState }) => {
   const [schemaInputState, setSchemaInputState] = useState(initialState);
+
+  useEffect(() => {
+    setSchemaInputState(initialState);
+  }, [initialState]);
 
   const { modalState, modalDispatch } = useContext(ModalContext) as {
     modalState: ModalState;

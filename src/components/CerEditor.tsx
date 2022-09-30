@@ -1,13 +1,13 @@
 import Editor from "@monaco-editor/react";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import theme from "../../public/monaco-theme.json";
 import { modalActions, ModalContext } from "../state/modal";
 import { schemaActions, SchemaContext } from "../state/schema";
-import CreateSchema from "./modals/CreateSchema";
+import UpdateSchema from "./modals/UpdateSchema";
 
 const SEditorRest = styled.div`
-  width: 25rem;
+  width: 28rem;
   height: 90vh;
   border: ${({ theme }) => `3px dashed ${theme.modal}`};
   border-radius: 1.5rem;
@@ -47,8 +47,9 @@ const SFloat = styled.div`
   background: ${({ theme }) => theme.accent1};
 `;
 
-const Sp1 = styled.p`
+const STitle = styled.p`
   color: ${({ theme }) => theme.text3};
+  cursor: pointer;
 `;
 
 const Simg = styled.img`
@@ -57,6 +58,7 @@ const Simg = styled.img`
   :hover {
     transform: scale(1.1);
   }
+  cursor: pointer;
 `;
 
 const CerEditor = () => {
@@ -88,8 +90,20 @@ const CerEditor = () => {
         },
       });
     },
-    [schemaState]
+    [schemaState, schemaActions]
   );
+
+  const getCurrentSchema = useMemo(() => {
+    const index = schemaState.schemas.findIndex(
+      (e) => e.id === schemaState.activeId
+    );
+    const current = schemaState.schemas[index];
+    return current;
+  }, [schemaState]);
+
+  const handleUpdateSchema = useCallback(() => {
+    modalDispatch({ type: modalActions.OPEN_UPDATE_SCHEMA_MODAL });
+  }, []);
 
   const handleFullScreen = useCallback(() => {
     modalDispatch({ type: modalActions.OPEN_ZEN_MODE_MODAL });
@@ -103,6 +117,8 @@ const CerEditor = () => {
         </SEditorRest>
       ) : (
         <SEditor>
+          <UpdateSchema initialState={getCurrentSchema} />
+
           <Editor
             height="100vh"
             defaultLanguage="json"
@@ -120,7 +136,7 @@ const CerEditor = () => {
           />
 
           <SFloat>
-            <Sp1>EnvfyProtocolState</Sp1>
+            <STitle onClick={handleUpdateSchema}>EnvfyProtocolState</STitle>
             <div style={{ flex: 1 }} />
             <Simg src="delete.svg" alt="" />
             <Simg onClick={handleFullScreen} src="fullscreen.svg" alt="" />
