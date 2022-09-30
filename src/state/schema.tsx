@@ -1,0 +1,72 @@
+import { createContext, useReducer } from "react";
+
+const reducer: SchemaReducer = (state, action) => {
+  let newState: SchemaState;
+
+  switch (action.type) {
+    case schemaActions.CREATE_SCHEMA:
+      newState = {
+        activeId: action.payload.id,
+        schemas: [action.payload, ...state.schemas],
+      };
+      break;
+
+    case schemaActions.UPDATE_SCHEMA:
+      // get index of payload in schemas
+      const index = state.schemas.findIndex((e) => e.id === action.payload.id);
+
+      // update schema at index with payload
+      state.schemas[index] = action.payload;
+
+      // swap updated schema at index with schema at index 0
+      [state.schemas[0], state.schemas[index]] = [
+        state.schemas[index],
+        state.schemas[0],
+      ];
+
+      newState = {
+        activeId: action.payload.id,
+        schemas: state.schemas,
+      };
+      break;
+
+    case schemaActions.DELETE_SCHEMA:
+      // remove payload as activeId if active
+      if (state.activeId === action.payload.id) {
+        state.activeId = "";
+      }
+
+      // remove payload with id from state
+      state.schemas = state.schemas.filter((e) => e.id !== action.payload.id);
+
+      newState = state;
+      break;
+
+    default:
+      newState = state;
+      break;
+  }
+
+  return newState;
+};
+
+export const SchemaContext = createContext<any>(undefined);
+
+export const SchemasProvider: React.FC<SchemaProvider> = ({
+  children,
+  initialState,
+}) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const value = { schemasState: state, schemasDispatch: dispatch };
+
+  return (
+    <SchemaContext.Provider value={value}>{children}</SchemaContext.Provider>
+  );
+};
+
+export const schemaActions = {
+  CREATE_SCHEMA: "CREATE_SCHEMA",
+  UPDATE_SCHEMA: "UPDATE_SCHEMA",
+  DELETE_SCHEMA: "DELETE_SCHEMA",
+};
