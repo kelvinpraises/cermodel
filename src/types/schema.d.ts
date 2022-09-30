@@ -17,7 +17,7 @@ interface Schema {
 
 interface SchemaAction {
   type: any;
-  payload: Schema;
+  payload?: Schema;
 }
 
 interface SchemaProvider {

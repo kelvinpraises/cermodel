@@ -6,28 +6,30 @@ const reducer: SchemaReducer = (state, action) => {
   switch (action.type) {
     case schemaActions.CREATE_SCHEMA:
       newState = {
-        activeId: action.payload.id,
-        schemas: [action.payload, ...state.schemas],
+        activeId: action.payload!.id,
+        schemas: [action.payload!, ...state.schemas],
       };
       break;
 
     case schemaActions.UPDATE_SCHEMA:
-      const index = state.schemas.findIndex((e) => e.id === action.payload.id);
+      const index = state.schemas.findIndex(
+        (e) => e.id === action.payload!!.id
+      );
 
-      state.schemas[index] = action.payload;
+      state.schemas[index] = action.payload!;
 
       [state.schemas[0], state.schemas[index]] = [
         state.schemas[index],
         state.schemas[0],
       ];
 
-      newState = { activeId: action.payload.id, schemas: state.schemas };
+      newState = { activeId: action.payload!.id, schemas: state.schemas };
       break;
 
     case schemaActions.DELETE_SCHEMA:
-      if (state.activeId === action.payload.id) state.activeId = "";
+      if (state.activeId === action.payload!.id) state.activeId = "";
 
-      state.schemas = state.schemas.filter((e) => e.id !== action.payload.id);
+      state.schemas = state.schemas.filter((e) => e.id !== action.payload!.id);
 
       newState = { ...state };
       break;
