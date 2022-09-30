@@ -127,7 +127,7 @@ const SchemaModal = () => {
     setSchemaInputState((prev) => {
       return { ...prev, borderColor: randColor };
     });
-  }, []);
+  }, [cardColor]);
 
   const handleInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setSchemaInputState((prev) => {
@@ -144,27 +144,31 @@ const SchemaModal = () => {
   const handleModalClose = useCallback(() => {
     modalDispatch({ type: modalActions.CLOSE_SCHEMA_MODAL });
     setSchemaInputState(initialState);
-  }, []);
+  }, [initialState, modalActions]);
 
-  const handleSaveChanges = useCallback((state: Schema) => {
-    modalDispatch({ type: modalActions.CLOSE_SCHEMA_MODAL });
-    setSchemaInputState(initialState);
+  const handleSaveChanges = useCallback(
+    (state: Schema) => {
+      modalDispatch({ type: modalActions.CLOSE_SCHEMA_MODAL });
+      setSchemaInputState(initialState);
 
-    const isNewSchema = schemaState.schemas.findIndex((e) => e.id === state.id);
+      const isNewSchema = schemaState.schemas.findIndex(
+        (e) => e.id === state.id
+      );
 
-    if (isNewSchema === -1) {
-      schemaDispatch({
-        type: schemaActions.CREATE_SCHEMA,
-        payload: state,
-      });
-    } else {
-      schemaDispatch({ type: schemaActions.UPDATE_SCHEMA });
-    }
-  }, []);
+      if (isNewSchema === -1) {
+        schemaDispatch({ type: schemaActions.CREATE_SCHEMA, payload: state });
+      } else {
+        schemaDispatch({ type: schemaActions.UPDATE_SCHEMA, payload: state });
+      }
+
+      console.log(schemaState);
+    },
+    [initialState, schemaState, modalActions]
+  );
 
   const handleReset = useCallback(() => {
     setSchemaInputState(initialState);
-  }, []);
+  }, [initialState]);
 
   if (!modalState.showSchemaDetails) {
     return null;

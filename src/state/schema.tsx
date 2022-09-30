@@ -50,7 +50,7 @@ export const SchemaProvider: React.FC<SchemaProvider> = ({
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const value = { schemasState: state, schemasDispatch: dispatch };
+  const value = { schemaState: state, schemaDispatch: dispatch };
 
   return (
     <SchemaContext.Provider value={value}>{children}</SchemaContext.Provider>
