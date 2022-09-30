@@ -1,9 +1,15 @@
-import { ChangeEvent, useCallback, useContext, useEffect } from "react";
+import {
+  ChangeEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../../state/modal";
 import { schemaActions, SchemaContext } from "../../state/schema";
-import SaveChange from "./SaveChange";
 import Text from "../Text";
+import SaveChange from "./SaveChange";
 
 const SModal = styled.div`
   position: fixed;
@@ -85,7 +91,21 @@ const Simg = styled.img`
 
 const cardColor = ["#34A853", "#1DA1F2", "#9B33C3", "#1877F2", "#0A66C2"];
 
+const initialState = {
+  id: "",
+  schema: "",
+  schemaDetails: {
+    name: "",
+    description: "",
+    schemaAlias: "",
+    definitionAlias: "",
+  },
+  borderColor: "",
+};
+
 const SchemaModal = () => {
+  const [schemaInputState, setSchemaInputState] = useState(initialState);
+
   const { modalState, modalDispatch } = useContext(ModalContext) as {
     modalState: ModalState;
     modalDispatch: any;
@@ -95,57 +115,55 @@ const SchemaModal = () => {
     schemaState: SchemaState;
     schemaDispatch: (x: SchemaAction) => any;
   };
-  
+
   useEffect(() => {
     const randNum = (x: number) => Math.floor(Math.random() * x);
     const randColor = cardColor[randNum(cardColor.length - 1)];
 
-    schemaDispatch({
-      type: schemaActions.SET_ID,
-      idPayload: "" + randNum(100000000),
+    setSchemaInputState((prev) => {
+      return { ...prev, id: "" + randNum(100000000) };
     });
 
-    schemaDispatch({
-      type: schemaActions.SET_BORDER_COLOR,
-      borderPayload: randColor,
+    setSchemaInputState((prev) => {
+      return { ...prev, borderColor: randColor };
     });
   }, []);
 
   const handleInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    schemaDispatch({
-      type: schemaActions.CHANGE_INPUT,
-      inputPayload: {
-        name: e.target.name,
-        value: e.target.value,
-      } as SchemaInput,
+    setSchemaInputState((prev) => {
+      return {
+        ...prev,
+        schemaDetails: {
+          ...prev.schemaDetails,
+          [e.target.name]: e.target.value,
+        },
+      };
     });
   }, []);
 
   const handleModalClose = useCallback(() => {
     modalDispatch({ type: modalActions.CLOSE_SCHEMA_MODAL });
-    schemaDispatch({ type: schemaActions.CLEAR_STATE });
+    setSchemaInputState(initialState);
   }, []);
 
-  const handleSaveChanges = useCallback((state: SchemaState) => {
+  const handleSaveChanges = useCallback((state: Schema) => {
     modalDispatch({ type: modalActions.CLOSE_SCHEMA_MODAL });
-    schemaDispatch({ type: schemaActions.CLEAR_STATE });
+    setSchemaInputState(initialState);
 
-    const isNewSchema = schemasState.schemas.findIndex(
-      (e) => e.id === state.id
-    );
+    const isNewSchema = schemaState.schemas.findIndex((e) => e.id === state.id);
 
     if (isNewSchema === -1) {
-      schemasDispatch({
-        type: schemasActions.CREATE_SCHEMA,
+      schemaDispatch({
+        type: schemaActions.CREATE_SCHEMA,
         payload: state,
       });
     } else {
-      schemasDispatch({ type: schemasActions.UPDATE_SCHEMA });
+      schemaDispatch({ type: schemaActions.UPDATE_SCHEMA });
     }
   }, []);
 
   const handleReset = useCallback(() => {
-    schemaDispatch({ type: schemaActions.CLEAR_STATE });
+    setSchemaInputState(initialState);
   }, []);
 
   if (!modalState.showSchemaDetails) {
@@ -164,35 +182,35 @@ const SchemaModal = () => {
           <STitle>Name</STitle>
           <SInput
             type="text"
-            value={schemaState.schemaDetails.name}
+            value={schemaInputState.schemaDetails.name}
             onChange={handleInputChange}
             name="name"
           />
           <STitle>Description</STitle>
           <SInput
             type="text"
-            value={schemaState.schemaDetails.description}
+            value={schemaInputState.schemaDetails.description}
             onChange={handleInputChange}
             name="description"
           />
           <STitle>Schema Alias</STitle>
           <SInput
             type="text"
-            value={schemaState.schemaDetails.schemaAlias}
+            value={schemaInputState.schemaDetails.schemaAlias}
             onChange={handleInputChange}
             name="schemaAlias"
           />
           <STitle>Definition Alias</STitle>
           <SInput
             type="text"
-            value={schemaState.schemaDetails.definitionAlias}
+            value={schemaInputState.schemaDetails.definitionAlias}
             onChange={handleInputChange}
             name="definitionAlias"
           />
         </SBody>
 
         <SaveChange
-          state={schemaState}
+          state={schemaInputState}
           saveChanges={(state) => handleSaveChanges(state)}
           resetChanges={() => handleReset()}
         />
