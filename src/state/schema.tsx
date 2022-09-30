@@ -12,9 +12,7 @@ const reducer: SchemaReducer = (state, action) => {
       break;
 
     case schemaActions.UPDATE_SCHEMA:
-      const index = state.schemas.findIndex(
-        (e) => e.id === action.payload!.id
-      );
+      const index = state.schemas.findIndex((e) => e.id === action.payload!.id);
 
       state.schemas[index] = action.payload!;
 
