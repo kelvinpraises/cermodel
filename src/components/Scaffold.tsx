@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import DownloadModel from "./modals/Downloader";
-import SchemaModal from "./modals/CreateSchema";
+import CreateSchema from "./modals/SchemaDetails";
+import Downloader from "./modals/Downloader";
+import Initialize from "./modals/Initialize";
 import Settings from "./modals/Settings";
-import WelcomeModal from "./modals/Initialize";
 import ZenMode from "./modals/ZenMode";
 
 interface IScaffoldProp {
@@ -21,11 +21,11 @@ const Scaffold: React.FC<IScaffoldProp> = ({ children }) => {
   return (
     <SScaffold>
       <SContainer>{children}</SContainer>
-      <WelcomeModal />
-      <SchemaModal />
+      <Initialize />
+      <CreateSchema />
       <ZenMode />
       <Settings />
-      <DownloadModel />
+      <Downloader />
     </SScaffold>
   );
 };

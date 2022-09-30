@@ -5,7 +5,7 @@ import { schemaActions, SchemaContext } from "../../state/schema";
 import Text from "../Text";
 import SaveChange from "./SaveChange";
 
-interface ISchemaModalProps {
+interface ISchemaDetailsProps {
   initialState?: Schema;
 }
 
@@ -101,7 +101,7 @@ const defaultProp = {
   borderColor: "",
 };
 
-const SchemaModal: React.FC<ISchemaModalProps> = ({
+const SchemaDetails: React.FC<ISchemaDetailsProps> = ({
   initialState = defaultProp,
 }) => {
   const [schemaInputState, setSchemaInputState] = useState(initialState);
@@ -229,4 +229,4 @@ const SchemaModal: React.FC<ISchemaModalProps> = ({
   );
 };
 
-export default SchemaModal;
+export default SchemaDetails;

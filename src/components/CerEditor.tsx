@@ -4,6 +4,7 @@ import styled from "styled-components";
 import theme from "../../public/monaco-theme.json";
 import { modalActions, ModalContext } from "../state/modal";
 import { schemaActions, SchemaContext } from "../state/schema";
+import CreateSchema from "./modals/SchemaDetails";
 
 const SEditorRest = styled.div`
   width: 25rem;
@@ -77,15 +78,18 @@ const CerEditor = () => {
     monaco.editor.setTheme("my-dark");
   }, []);
 
-  const handleEditorChange = useCallback((value: any, event: any) => {
-    schemaDispatch({
-      type: schemaActions.UPDATE_SCHEMA,
-      payload: {
-        id: schemaState.activeId,
-        schemaDraft: value,
-      },
-    });
-  }, [schemaState]);
+  const handleEditorChange = useCallback(
+    (value: any, event: any) => {
+      schemaDispatch({
+        type: schemaActions.UPDATE_SCHEMA,
+        payload: {
+          id: schemaState.activeId,
+          schemaDraft: value,
+        },
+      });
+    },
+    [schemaState]
+  );
 
   const handleFullScreen = useCallback(() => {
     modalDispatch({ type: modalActions.OPEN_ZEN_MODE_MODAL });
@@ -114,6 +118,7 @@ const CerEditor = () => {
               folding: false,
             }}
           />
+
           <SFloat>
             <Sp1>EnvfyProtocolState</Sp1>
             <div style={{ flex: 1 }} />
