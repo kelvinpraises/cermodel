@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
-import Text from "./Text";
+import Text from "../Text";
 
 const SBox = styled.div`
   width: 23rem;

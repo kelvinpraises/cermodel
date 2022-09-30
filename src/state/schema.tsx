@@ -4,14 +4,14 @@ const reducer: SchemaReducer = (state, action) => {
   let newState: SchemaState;
 
   switch (action.type) {
-    case schemaActionsType.CREATE_SCHEMA:
+    case schemaActions.CREATE_SCHEMA:
       newState = {
         activeId: action.payload.id,
         schemas: [action.payload, ...state.schemas],
       };
       break;
 
-    case schemaActionsType.UPDATE_SCHEMA:
+    case schemaActions.UPDATE_SCHEMA:
       const index = state.schemas.findIndex((e) => e.id === action.payload.id);
 
       state.schemas[index] = action.payload;
@@ -24,7 +24,7 @@ const reducer: SchemaReducer = (state, action) => {
       newState = { activeId: action.payload.id, schemas: state.schemas };
       break;
 
-    case schemaActionsType.DELETE_SCHEMA:
+    case schemaActions.DELETE_SCHEMA:
       if (state.activeId === action.payload.id) state.activeId = "";
 
       state.schemas = state.schemas.filter((e) => e.id !== action.payload.id);
@@ -55,7 +55,7 @@ export const SchemasProvider: React.FC<SchemaProvider> = ({
   );
 };
 
-export const schemaActionsType = {
+export const schemaActions = {
   CREATE_SCHEMA: "CREATE_SCHEMA",
   UPDATE_SCHEMA: "UPDATE_SCHEMA",
   DELETE_SCHEMA: "DELETE_SCHEMA",

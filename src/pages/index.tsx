@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import styled from "styled-components";
-import AddButton from "../components/AddButton";
+import AddButton from "../components/buttons/AddButton";
 import CerEditor from "../components/CerEditor";
 import Operations from "../components/Operations";
 import Stack from "../components/Stack";

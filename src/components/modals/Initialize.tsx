@@ -1,7 +1,7 @@
 import { useCallback, useContext } from "react";
 import styled from "styled-components";
-import { modalActions, ModalContext } from "../state/modal";
-import Text from "./Text";
+import { modalActions, ModalContext } from "../../state/modal";
+import Text from "../Text";
 
 const SModal = styled.div`
   position: fixed;

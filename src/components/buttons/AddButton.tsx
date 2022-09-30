@@ -1,6 +1,6 @@
 import React, { useContext, DispatchWithoutAction, useCallback } from "react";
 import styled from "styled-components";
-import { modalActions, ModalContext } from "../state/modal";
+import { modalActions, ModalContext } from "../../state/modal";
 
 const Simg = styled.img`
   transition: 250ms ease-in-out;

@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import DownloadModel from "./DownloadModel";
-import SchemaModal from "./SchemaModal";
-import Settings from "./Setting";
-import WelcomeModal from "./WelcomeModal";
-import ZenMode from "./ZenMode";
+import DownloadModel from "./modals/Downloader";
+import SchemaModal from "./modals/CreateSchema";
+import Settings from "./modals/Setting";
+import WelcomeModal from "./modals/Initialize";
+import ZenMode from "./modals/ZenMode";
 
 interface IScaffoldProp {
   children: React.ReactNode;

@@ -1,9 +1,9 @@
 import { ChangeEvent, useCallback, useContext, useEffect } from "react";
 import styled from "styled-components";
-import { modalActions, ModalContext } from "../state/modal";
-import { schemaActions, SchemaContext } from "../state/schema";
+import { modalActions, ModalContext } from "../../state/modal";
+import { schemaActions, SchemaContext } from "../../state/schema";
 import SaveChange from "./SaveChange";
-import Text from "./Text";
+import Text from "../Text";
 
 const SModal = styled.div`
   position: fixed;
