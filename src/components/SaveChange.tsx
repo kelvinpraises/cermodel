@@ -83,10 +83,10 @@ const SaveChange = ({
     <SBox>
       <Text>Save changes?</Text>
       <SBox1>
-        <SReset onClick={() => handleReset()}>
+        <SReset onClick={handleReset}>
           <Sp>Reset</Sp>
         </SReset>
-        <SSave onClick={() => handleSave()}>
+        <SSave onClick={handleSave}>
           <Sp>Save</Sp>
         </SSave>
       </SBox1>

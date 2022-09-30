@@ -1,9 +1,7 @@
 import { useCallback, useContext } from "react";
 import styled from "styled-components";
-import { modalActions, ModalContext } from "../state/modals";
-import SaveChange from "./SaveChange";
+import { modalActions, ModalContext } from "../state/modal";
 import Text from "./Text";
-// import { Toggle } from "react-toggle-component";
 
 const SModal = styled.div`
   position: fixed;
@@ -151,31 +149,25 @@ const Simg = styled.img`
 `;
 
 const Settings = () => {
-  const {
-    state: { showSettings },
-    dispatch,
-  } = useContext(ModalContext) as {
-    state: ModalState;
-    dispatch: any;
+  const { modalState, modalDispatch } = useContext(ModalContext) as {
+    modalState: ModalState;
+    modalDispatch: any;
   };
 
+  const handleClose = useCallback(() => {
+    modalDispatch({ type: modalActions.CLOSE_SETTING_MODAL });
+  }, []);
 
-  if (!showSettings) {
+  if (!modalState.showSettings) {
     return null;
   }
 
   return (
-    <SModal
-      onClick={() => dispatch({ type: modalActions.CLOSE_SETTING_MODAL })}
-    >
+    <SModal onClick={handleClose}>
       <SSchema onClick={(e) => e.stopPropagation()}>
         <SHeader>
           <Text type="h5">Settings</Text>
-          <Simg
-            onClick={() => dispatch({ type: modalActions.CLOSE_SETTING_MODAL })}
-            src="close.svg"
-            alt=""
-          />
+          <Simg onClick={handleClose} src="close.svg" alt="" />
         </SHeader>
         <SBody>
           <STitle>DID Seed Key</STitle>

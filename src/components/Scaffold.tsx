@@ -3,7 +3,7 @@ import DownloadModel from "./DownloadModel";
 import SchemaModal from "./SchemaModal";
 import Settings from "./Setting";
 import WelcomeModal from "./WelcomeModal";
-import Zenmode from "./Zenmode";
+import ZenMode from "./ZenMode";
 
 interface IScaffoldProp {
   children: React.ReactNode;
@@ -23,7 +23,7 @@ const Scaffold: React.FC<IScaffoldProp> = ({ children }) => {
       <SContainer>{children}</SContainer>
       <WelcomeModal />
       <SchemaModal />
-      <Zenmode />
+      <ZenMode />
       <Settings />
       <DownloadModel />
     </SScaffold>

@@ -1,8 +1,9 @@
 import Editor from "@monaco-editor/react";
-import { useContext, useEffect, useRef } from "react";
+import { useCallback, useContext, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { modalActions, ModalContext } from "../state/modals";
+import { modalActions, ModalContext } from "../state/modal";
 import toggleFullScreen from "../utils/fullscreen";
+import theme from "../../public/monaco-theme.json";
 
 const SBackground = styled.div`
   background: ${({ theme }) => theme.background};
@@ -16,15 +17,15 @@ const SBackground = styled.div`
   z-index: 2000;
 `;
 
-const SZenmode = styled.div`
-  width: 30.6rem;
+const SZenMode = styled.div`
+  width: 45vw;
   height: 100vh;
   background: ${({ theme }) => theme.card};
   overflow-y: auto;
 `;
 
 const STitle = styled.div`
-  width: 30.6rem;
+  width: 45vw;
   height: 4rem;
   background: ${({ theme }) => theme.accent1};
   display: flex;
@@ -45,76 +46,58 @@ const Simg = styled.img`
   }
 `;
 
-const Zenmode = () => {
-  const {
-    state: { showZenMode },
-    dispatch,
-  } = useContext(ModalContext) as {
-    state: ModalState;
-    dispatch: any;
+const ZenMode = () => {
+  const { modalState, modalDispatch } = useContext(ModalContext) as {
+    modalState: ModalState;
+    modalDispatch: any;
   };
 
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (showZenMode) {
+    if (modalState.showZenMode) {
       toggleFullScreen(ref);
     }
-  }, [showZenMode]);
+  }, [modalState.showZenMode]);
 
-  function handleEditorDidMount(editor: any, monaco: any) {
-    monaco.editor.defineTheme("my-dark", {
-      base: "vs",
-      inherit: true,
-      rules: [
-        { token: "custom-info", foreground: "a3a7a9", background: "ffffff" },
-        { token: "custom-error", foreground: "ee4444" },
-        { token: "custom-notice", foreground: "1055af" },
-        { token: "custom-date", foreground: "20aa20" },
-      ],
-      colors: {
-        "editor.background": "#24283B",
-      },
-    });
-
+  const handleEditorDidMount = useCallback((editor: any, monaco: any) => {
+    monaco.editor.defineTheme("my-dark", JSON.parse(JSON.stringify(theme)));
     monaco.editor.setTheme("my-dark");
-  }
+  }, []);
 
-  if (!showZenMode) {
+  const handleClose = useCallback(() => {
+    toggleFullScreen(ref);
+    modalDispatch({ type: modalActions.CLOSE_ZEN_MODE_MODAL });
+  }, [ref]);
+
+  if (!modalState.showZenMode) {
     return null;
   }
 
   return (
     <SBackground ref={ref}>
-      <SZenmode>
+      <SZenMode>
         <STitle>
           <Sp>EnvfyProtocolState</Sp>
-          <Simg
-            onClick={() => {
-              toggleFullScreen(ref);
-              dispatch({ type: modalActions.CLOSE_ZEN_MODE_MODAL });
-            }}
-            src="close.svg"
-            alt=""
-          />
+          <Simg onClick={handleClose} src="close.svg" alt="" />
         </STitle>
 
         <Editor
           height="90vh"
-          defaultLanguage="javascript"
+          defaultLanguage="json"
           theme="my-dark"
           onMount={handleEditorDidMount}
           options={{
             minimap: {
-              enabled: true,
+              enabled: false,
             },
             fontSize: 14,
-            wordWrap: "on",
+            wordWrap: "off",
           }}
         />
-      </SZenmode>
+      </SZenMode>
     </SBackground>
   );
 };
 
-export default Zenmode;
+export default ZenMode;

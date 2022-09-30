@@ -1,7 +1,8 @@
 import Editor from "@monaco-editor/react";
-import { useContext } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { modalActions, ModalContext } from "../state/modals";
+import theme from "../../public/monaco-theme.json";
+import { modalActions, ModalContext } from "../state/modal";
 
 const SEditorRest = styled.div`
   width: 25rem;
@@ -16,7 +17,10 @@ const SEditorRest = styled.div`
 
 const SEditor = styled.div`
   position: relative;
-  width: 25rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 29rem;
   height: 95vh;
   border-radius: 1.5rem;
   background: ${({ theme }) => theme.card};
@@ -30,21 +34,19 @@ const Sp = styled.p`
 `;
 
 const SFloat = styled.div`
-  width: 23rem;
+  width: 27rem;
   height: 4rem;
   border-radius: 0.75rem;
-  position: fixed;
-  bottom: 2rem;
+  position: sticky;
+  bottom: 1rem;
   display: flex;
   align-items: center;
   padding: 1rem;
   background: ${({ theme }) => theme.accent1};
-  left: 3rem;
 `;
 
 const Sp1 = styled.p`
   color: ${({ theme }) => theme.text3};
-  margin-right: 6.3rem;
 `;
 
 const Simg = styled.img`
@@ -56,35 +58,30 @@ const Simg = styled.img`
 `;
 
 const CerEditor = () => {
-  function handleEditorDidMount(editor: any, monaco: any) {
-    monaco.editor.defineTheme("my-dark", {
-      base: "vs",
-      inherit: true,
-      rules: [
-        { token: "custom-info", foreground: "a3a7a9", background: "ffffff" },
-        { token: "custom-error", foreground: "ee4444" },
-        { token: "custom-notice", foreground: "1055af" },
-        { token: "custom-date", foreground: "20aa20" },
-      ],
-      colors: {
-        "editor.background": "#24283B",
-      },
-    });
+  const [showEditor, setShowEditor] = useState(false);
 
+  const { modalDispatch } = useContext(ModalContext) as { modalDispatch: any };
+
+  useEffect(() => {
+    setShowEditor(false);
+  }, []);
+
+  const handleEditorDidMount = useCallback((editor: any, monaco: any) => {
+    monaco.editor.defineTheme("my-dark", JSON.parse(JSON.stringify(theme)));
     monaco.editor.setTheme("my-dark");
-  }
+  }, []);
 
-  function handleEditorChange(value: any, event: any) {
+  const handleEditorChange = useCallback((value: any, event: any) => {
     console.log(`here is the current model value: ${value}`);
-  }
+  }, []);
 
-  const { dispatch } = useContext(ModalContext) as { dispatch: any };
-
-  const show = false;
+  const handleFullScreen = useCallback(() => {
+    modalDispatch({ type: modalActions.OPEN_ZEN_MODE_MODAL });
+  }, []);
 
   return (
     <>
-      {show ? (
+      {!showEditor ? (
         <SEditorRest>
           <Sp>Click The Green Button To Start Editing</Sp>
         </SEditorRest>
@@ -92,7 +89,7 @@ const CerEditor = () => {
         <SEditor>
           <Editor
             height="100vh"
-            defaultLanguage="javascript"
+            defaultLanguage="json"
             onChange={handleEditorChange}
             theme="my-dark"
             onMount={handleEditorDidMount}
@@ -101,20 +98,15 @@ const CerEditor = () => {
                 enabled: false,
               },
               fontSize: 14,
-              wordWrap: "on",
+              wordWrap: "off",
+              folding: false,
             }}
           />
           <SFloat>
             <Sp1>EnvfyProtocolState</Sp1>
+            <div style={{ flex: 1 }} />
             <Simg src="delete.svg" alt="" />
-            <Simg
-              onClick={() => {
-                dispatch({ type: modalActions.OPEN_ZEN_MODE_MODAL });
-                console.log("click");
-              }}
-              src="zenmode.svg"
-              alt=""
-            />
+            <Simg onClick={handleFullScreen} src="fullscreen.svg" alt="" />
           </SFloat>
         </SEditor>
       )}

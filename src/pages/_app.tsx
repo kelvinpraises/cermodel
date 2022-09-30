@@ -2,10 +2,10 @@ import type { AppProps } from "next/app";
 import { useMemo, useState } from "react";
 import { ThemeProvider } from "styled-components";
 import Scaffold from "../components/Scaffold";
-import { ModalProvider } from "../state/modals";
+import { ModalProvider } from "../state/modal";
 import { SchemaProvider } from "../state/schema";
 import { SchemasProvider } from "../state/schemas";
-import { SettingsProvider } from "../state/settings";
+import { SettingsProvider } from "../state/setting";
 import GlobalStyle from "../styles/global";
 import { darkTheme, lightTheme } from "../theme/theme";
 

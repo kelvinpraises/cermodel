@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import styled from "styled-components";
-import { modalActions, ModalContext } from "../state/modals";
+import { modalActions, ModalContext } from "../state/modal";
 
 const SBox = styled.div`
   width: 4.1rem;
@@ -41,19 +41,25 @@ const SDownload = styled.div`
 `;
 
 const Operations = () => {
-  const { dispatch } = useContext(ModalContext) as { dispatch: any };
+  const { modalDispatch } = useContext(ModalContext) as { modalDispatch: any };
 
   return (
     <SBox>
       <SDownload
-        onClick={() => dispatch({ type: modalActions.OPEN_DOWNLOAD_MODAL })}
+        onClick={() =>
+          modalDispatch({ type: modalActions.OPEN_DOWNLOAD_MODAL })
+        }
       >
         <img src="Download.svg" alt="" />
       </SDownload>
-      <SImg onClick={() => dispatch({ type: modalActions.OPEN_SETTING_MODAL })}>
+      <SImg
+        onClick={() => modalDispatch({ type: modalActions.OPEN_SETTING_MODAL })}
+      >
         <img src="Setting.svg" alt="" />
       </SImg>
-      <SImg onClick={() => dispatch({ type: modalActions.OPEN_WELCOME_MODAL })}>
+      <SImg
+        onClick={() => modalDispatch({ type: modalActions.OPEN_WELCOME_MODAL })}
+      >
         <img src="Info.svg" alt="" />
       </SImg>
     </SBox>

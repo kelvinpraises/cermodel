@@ -33,13 +33,14 @@ export const SettingsProvider: React.FC<SettingsProvider> = ({
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const value = { settingState: state, settingDispatch: dispatch };
+
   return (
-    <SettingsContext.Provider value={{ state, dispatch }}>
+    <SettingsContext.Provider value={value}>
       {children}
     </SettingsContext.Provider>
   );
 };
-
 
 export const settingsActions = {
   CHANGE_INPUT: "CHANGE_INPUT",

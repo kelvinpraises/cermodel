@@ -61,10 +61,10 @@ export const SchemasProvider: React.FC<SchemasProvider> = ({
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const value = { schemasState: state, schemasDispatch: dispatch };
+
   return (
-    <SchemasContext.Provider value={{ state, dispatch }}>
-      {children}
-    </SchemasContext.Provider>
+    <SchemasContext.Provider value={value}>{children}</SchemasContext.Provider>
   );
 };
 

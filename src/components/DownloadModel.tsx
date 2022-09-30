@@ -1,6 +1,6 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import styled from "styled-components";
-import { modalActions, ModalContext } from "../state/modals";
+import { modalActions, ModalContext } from "../state/modal";
 import Text from "./Text";
 
 interface ModelBoxProps {
@@ -148,32 +148,25 @@ const Simg = styled.img`
 `;
 
 const DownloadModel = () => {
-  const {
-    state: { showDownload },
-    dispatch,
-  } = useContext(ModalContext) as {
-    state: ModalState;
-    dispatch: any;
+  const { modalState, modalDispatch } = useContext(ModalContext) as {
+    modalState: ModalState;
+    modalDispatch: any;
   };
 
-  if (!showDownload) {
+  const handleClose = useCallback(() => {
+    modalDispatch({ type: modalActions.CLOSE_DOWNLOAD_MODAL });
+  }, []);
+
+  if (!modalState.showDownload) {
     return null;
   }
 
   return (
-    <SModal
-      onClick={() => dispatch({ type: modalActions.CLOSE_DOWNLOAD_MODAL })}
-    >
+    <SModal onClick={handleClose}>
       <SSchema onClick={(e) => e.stopPropagation()}>
         <SHeader>
           <Text type="h5">Model</Text>
-            <Simg
-              onClick={() =>
-                dispatch({ type: modalActions.CLOSE_DOWNLOAD_MODAL })
-              }
-              src="close.svg"
-              alt=""
-            />
+          <Simg onClick={handleClose} src="close.svg" alt="" />
         </SHeader>
         <SBody>
           <SSchemaDetails>

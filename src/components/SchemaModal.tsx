@@ -1,12 +1,6 @@
-import {
-  ChangeEvent,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-} from "react";
+import { ChangeEvent, useCallback, useContext, useEffect } from "react";
 import styled from "styled-components";
-import { modalActions, ModalContext } from "../state/modals";
+import { modalActions, ModalContext } from "../state/modal";
 import { schemaActions, SchemaContext } from "../state/schema";
 import { schemasActions, SchemasContext } from "../state/schemas";
 import SaveChange from "./SaveChange";
@@ -90,20 +84,23 @@ const Simg = styled.img`
   }
 `;
 
+const cardColor = ["#34A853", "#1DA1F2", "#9B33C3", "#1877F2", "#0A66C2"];
+
 const SchemaModal = () => {
-  const { state: modalState, dispatch: modalDispatch } = useContext(
-    ModalContext
-  ) as { state: ModalState; dispatch: any };
+  const { modalState, modalDispatch } = useContext(ModalContext) as {
+    modalState: ModalState;
+    modalDispatch: any;
+  };
 
-  const { state: schemaState, dispatch: schemaDispatch } = useContext(
-    SchemaContext
-  ) as { state: SchemaState; dispatch: (x: SchemaAction) => any };
+  const { schemaState, schemaDispatch } = useContext(SchemaContext) as {
+    schemaState: SchemaState;
+    schemaDispatch: (x: SchemaAction) => any;
+  };
 
-  const { state: schemasState, dispatch: schemasDispatch } = useContext(
-    SchemasContext
-  ) as { state: SchemasState; dispatch: any };
-
-  const cardColor = ["#34A853", "#1DA1F2", "#9B33C3", "#1877F2", "#0A66C2"];
+  const { schemasState, schemasDispatch } = useContext(SchemasContext) as {
+    schemasState: SchemasState;
+    schemasDispatch: any;
+  };
 
   useEffect(() => {
     const randNum = (x: number) => Math.floor(Math.random() * x);
@@ -146,7 +143,7 @@ const SchemaModal = () => {
     if (isNewSchema === -1) {
       schemasDispatch({
         type: schemasActions.CREATE_SCHEMA,
-        payload: state ,
+        payload: state,
       });
     } else {
       schemasDispatch({ type: schemasActions.UPDATE_SCHEMA });

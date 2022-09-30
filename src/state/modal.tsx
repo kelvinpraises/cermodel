@@ -90,10 +90,10 @@ export const ModalProvider: React.FC<ModalProvider> = ({
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const value = { modalState: state, modalDispatch: dispatch };
+
   return (
-    <ModalContext.Provider value={{ state, dispatch }}>
-      {children}
-    </ModalContext.Provider>
+    <ModalContext.Provider value={value}>{children}</ModalContext.Provider>
   );
 };
 

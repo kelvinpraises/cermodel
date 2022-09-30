@@ -1,6 +1,6 @@
-import React, { useContext, DispatchWithoutAction } from "react";
+import React, { useContext, DispatchWithoutAction, useCallback } from "react";
 import styled from "styled-components";
-import { modalActions, ModalContext } from "../state/modals";
+import { modalActions, ModalContext } from "../state/modal";
 
 const Simg = styled.img`
   transition: 250ms ease-in-out;
@@ -12,10 +12,14 @@ const Simg = styled.img`
 `;
 
 const AddButton = () => {
-  const { dispatch } = useContext(ModalContext) as { dispatch: any };
+  const { modalDispatch } = useContext(ModalContext) as { modalDispatch: any };
+
+  const handleClick = useCallback(() => {
+    modalDispatch({ type: modalActions.OPEN_SCHEMA_MODAL });
+  }, []);
 
   return (
-    <div onClick={() => dispatch({ type: modalActions.OPEN_SCHEMA_MODAL })}>
+    <div onClick={handleClick}>
       <Simg src="add.svg" alt="" />
     </div>
   );

@@ -1,6 +1,6 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import styled from "styled-components";
-import { modalActions, ModalContext } from "../state/modals";
+import { modalActions, ModalContext } from "../state/modal";
 import Text from "./Text";
 
 const SModal = styled.div`
@@ -51,29 +51,24 @@ const Simg = styled.img`
 const SBody = styled.div``;
 
 const WelcomeModal = () => {
-  const {
-    state: { showWelcome },
-    dispatch,
-  } = useContext(ModalContext) as {
-    state: ModalState;
-    dispatch: any;
+  const { modalState, modalDispatch } = useContext(ModalContext) as {
+    modalState: ModalState;
+    modalDispatch: any;
   };
 
-  if (!showWelcome) {
+  const handleClose = useCallback(() => {
+    modalDispatch({ type: modalActions.CLOSE_WELCOME_MODAL });
+  }, []);
+
+  if (!modalState.showWelcome) {
     return null;
   }
 
   return (
-    <SModal
-      onClick={() => dispatch({ type: modalActions.CLOSE_WELCOME_MODAL })}
-    >
+    <SModal onClick={handleClose}>
       <SWelcome onClick={(e) => e.stopPropagation()}>
         <SHeader>
-          <Simg
-            onClick={() => dispatch({ type: modalActions.CLOSE_WELCOME_MODAL })}
-            src="close.svg"
-            alt=""
-          />
+          <Simg onClick={handleClose} src="close.svg" alt="" />
           <Text type="h5">Welcome</Text>
           <Sp>Next</Sp>
         </SHeader>
