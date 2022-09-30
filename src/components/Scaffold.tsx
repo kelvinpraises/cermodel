@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import DownloadModel from "./modals/Downloader";
 import SchemaModal from "./modals/CreateSchema";
-import Settings from "./modals/Setting";
+import Settings from "./modals/Settings";
 import WelcomeModal from "./modals/Initialize";
 import ZenMode from "./modals/ZenMode";
 
