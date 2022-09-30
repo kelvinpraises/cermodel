@@ -42,7 +42,7 @@ const reducer: SchemaReducer = (state, action) => {
 
 export const SchemaContext = createContext<any>(undefined);
 
-export const SchemasProvider: React.FC<SchemaProvider> = ({
+export const SchemaProvider: React.FC<SchemaProvider> = ({
   children,
   initialState,
 }) => {
