@@ -25,4 +25,4 @@ interface SchemaProvider {
   initialState: SchemaState;
 }
 
-type SchemaReducer = (state: SchemaState, action: any) => SchemaState;
+type SchemaReducer = (state: SchemaState, action: SchemaAction) => SchemaState;
