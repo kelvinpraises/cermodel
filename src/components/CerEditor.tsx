@@ -3,6 +3,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import theme from "../../public/monaco-theme.json";
 import { modalActions, ModalContext } from "../state/modal";
+import { schemaActions, SchemaContext } from "../state/schema";
 
 const SEditorRest = styled.div`
   width: 25rem;
@@ -62,9 +63,14 @@ const CerEditor = () => {
 
   const { modalDispatch } = useContext(ModalContext) as { modalDispatch: any };
 
+  const { schemaState, schemaDispatch } = useContext(SchemaContext) as {
+    schemaState: SchemaState;
+    schemaDispatch: (x: SchemaAction) => any;
+  };
+
   useEffect(() => {
-    setShowEditor(false);
-  }, []);
+    if (schemaState.activeId) setShowEditor(true);
+  }, [schemaState]);
 
   const handleEditorDidMount = useCallback((editor: any, monaco: any) => {
     monaco.editor.defineTheme("my-dark", JSON.parse(JSON.stringify(theme)));
@@ -72,8 +78,14 @@ const CerEditor = () => {
   }, []);
 
   const handleEditorChange = useCallback((value: any, event: any) => {
-    console.log(`here is the current model value: ${value}`);
-  }, []);
+    schemaDispatch({
+      type: schemaActions.UPDATE_SCHEMA,
+      payload: {
+        id: schemaState.activeId,
+        schemaDraft: value,
+      },
+    });
+  }, [schemaState]);
 
   const handleFullScreen = useCallback(() => {
     modalDispatch({ type: modalActions.OPEN_ZEN_MODE_MODAL });

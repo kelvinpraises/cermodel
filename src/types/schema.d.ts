@@ -15,9 +15,15 @@ interface Schema {
   borderColor: string;
 }
 
+interface SchemaPayload {
+  schema?: Schema;
+  id?: string;
+  schemaDraft?: string;
+}
+
 interface SchemaAction {
   type: any;
-  payload?: Schema;
+  payload: SchemaPayload;
 }
 
 interface SchemaProvider {

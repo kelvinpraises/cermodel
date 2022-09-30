@@ -150,9 +150,19 @@ const SchemaModal: React.FC<ISchemaModalProps> = ({
 
         state.borderColor = randColor;
 
-        schemaDispatch({ type: schemaActions.CREATE_SCHEMA, payload: state });
+        schemaDispatch({
+          type: schemaActions.CREATE_SCHEMA,
+          payload: {
+            schema: state,
+          },
+        });
       } else {
-        schemaDispatch({ type: schemaActions.UPDATE_SCHEMA, payload: state });
+        schemaDispatch({
+          type: schemaActions.UPDATE_SCHEMA_DETAILS,
+          payload: {
+            schema: state,
+          },
+        });
       }
     },
     [initialState, schemaState, modalActions]
