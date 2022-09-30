@@ -4,7 +4,7 @@ import { ThemeProvider } from "styled-components";
 import Scaffold from "../components/Scaffold";
 import { ModalProvider } from "../state/modal";
 import { SchemaProvider } from "../state/schema";
-import { SchemasProvider } from "../state/schemas";
+import { SchemasProvider } from "../state/schema";
 import { SettingsProvider } from "../state/setting";
 import GlobalStyle from "../styles/global";
 import { darkTheme, lightTheme } from "../theme/theme";

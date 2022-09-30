@@ -1,54 +1,28 @@
-interface SchemasState {
+interface SchemaState {
   activeId: string;
-  schemas: Schemas;
+  schemas: Schema[];
 }
-
-type Schemas = Schema[];
 
 interface Schema {
   id: string;
   schema: string;
-  schemaDetails: SchemaDetails;
+  schemaDetails: {
+    name: string;
+    description: string;
+    schemaAlias: string;
+    definitionAlias: string;
+  };
   borderColor: string;
 }
 
-interface SchemasAction {
-  type: any;
-  payload: Schema;
-}
-
-interface SchemaDetails {
-  name: string;
-  description: string;
-  schemaAlias: string;
-  definitionAlias: string;
-}
-
-interface SchemasProvider {
-  children: React.ReactNode;
-  initialState: SchemasState;
-}
-
-type SchemasReducer = (state: SchemasState, action: any) => SchemasState;
-
-/// shcema
-type SchemaState = Schema;
-
 interface SchemaAction {
   type: any;
-  inputPayload?: SchemaInput;
-  idPayload?: string;
-  borderPayload?: string;
-  schemaPayload?: Schema;
-  
-}
-
-interface SchemaInput {
-  name: "name" | "description" | "schemaAlias" | "definitionAlias";
-  value: string;
+  payload: Schema;
 }
 
 interface SchemaProvider {
   children: React.ReactNode;
   initialState: SchemaState;
 }
+
+type SchemaReducer = (state: SchemaState, action: any) => SchemaState;

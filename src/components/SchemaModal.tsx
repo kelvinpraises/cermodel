@@ -2,7 +2,6 @@ import { ChangeEvent, useCallback, useContext, useEffect } from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../state/modal";
 import { schemaActions, SchemaContext } from "../state/schema";
-import { schemasActions, SchemasContext } from "../state/schemas";
 import SaveChange from "./SaveChange";
 import Text from "./Text";
 
