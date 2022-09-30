@@ -1,15 +1,13 @@
-import {
-  ChangeEvent,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, useCallback, useContext, useState } from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../../state/modal";
 import { schemaActions, SchemaContext } from "../../state/schema";
 import Text from "../Text";
 import SaveChange from "./SaveChange";
+
+interface ISchemaModalProps {
+  initialState?: Schema;
+}
 
 const SModal = styled.div`
   position: fixed;
@@ -91,7 +89,7 @@ const Simg = styled.img`
 
 const cardColor = ["#34A853", "#1DA1F2", "#9B33C3", "#1877F2", "#0A66C2"];
 
-const initialState = {
+const defaultProp = {
   id: "",
   schema: "",
   schemaDetails: {
@@ -103,7 +101,9 @@ const initialState = {
   borderColor: "",
 };
 
-const SchemaModal = () => {
+const SchemaModal: React.FC<ISchemaModalProps> = ({
+  initialState = defaultProp,
+}) => {
   const [schemaInputState, setSchemaInputState] = useState(initialState);
 
   const { modalState, modalDispatch } = useContext(ModalContext) as {
@@ -115,19 +115,6 @@ const SchemaModal = () => {
     schemaState: SchemaState;
     schemaDispatch: (x: SchemaAction) => any;
   };
-
-  useEffect(() => {
-    const randNum = (x: number) => Math.floor(Math.random() * x);
-    const randColor = cardColor[randNum(cardColor.length - 1)];
-
-    setSchemaInputState((prev) => {
-      return { ...prev, id: "" + randNum(100000000) };
-    });
-
-    setSchemaInputState((prev) => {
-      return { ...prev, borderColor: randColor };
-    });
-  }, [cardColor]);
 
   const handleInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setSchemaInputState((prev) => {
@@ -156,12 +143,17 @@ const SchemaModal = () => {
       );
 
       if (isNewSchema === -1) {
+        const randNum = (x: number) => Math.floor(Math.random() * x);
+        const randColor = cardColor[randNum(cardColor.length - 1)];
+
+        state.id = "" + randNum(100000000);
+
+        state.borderColor = randColor;
+
         schemaDispatch({ type: schemaActions.CREATE_SCHEMA, payload: state });
       } else {
         schemaDispatch({ type: schemaActions.UPDATE_SCHEMA, payload: state });
       }
-
-      console.log(schemaState);
     },
     [initialState, schemaState, modalActions]
   );
@@ -189,6 +181,7 @@ const SchemaModal = () => {
             value={schemaInputState.schemaDetails.name}
             onChange={handleInputChange}
             name="name"
+            autoComplete="off"
           />
           <STitle>Description</STitle>
           <SInput
@@ -196,6 +189,7 @@ const SchemaModal = () => {
             value={schemaInputState.schemaDetails.description}
             onChange={handleInputChange}
             name="description"
+            autoComplete="off"
           />
           <STitle>Schema Alias</STitle>
           <SInput
@@ -203,6 +197,7 @@ const SchemaModal = () => {
             value={schemaInputState.schemaDetails.schemaAlias}
             onChange={handleInputChange}
             name="schemaAlias"
+            autoComplete="off"
           />
           <STitle>Definition Alias</STitle>
           <SInput
@@ -210,6 +205,7 @@ const SchemaModal = () => {
             value={schemaInputState.schemaDetails.definitionAlias}
             onChange={handleInputChange}
             name="definitionAlias"
+            autoComplete="off"
           />
         </SBody>
 
