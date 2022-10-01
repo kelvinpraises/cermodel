@@ -1,9 +1,10 @@
 import Editor from "@monaco-editor/react";
-import { useCallback, useContext, useEffect, useRef } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import styled from "styled-components";
-import { modalActions, ModalContext } from "../../state/modal";
-import toggleFullScreen from "../../utils/fullscreen";
 import theme from "../../../public/monaco-theme.json";
+import { modalActions, ModalContext } from "../../state/modal";
+import { schemaActions, SchemaContext } from "../../state/schema";
+import toggleFullScreen from "../../utils/fullscreen";
 
 const SBackground = styled.div`
   background: ${({ theme }) => theme.background};
@@ -47,12 +48,17 @@ const Simg = styled.img`
 `;
 
 const ZenMode = () => {
+  const ref = useRef<HTMLDivElement>(null);
+
   const { modalState, modalDispatch } = useContext(ModalContext) as {
     modalState: ModalState;
     modalDispatch: any;
   };
 
-  const ref = useRef<HTMLDivElement>(null);
+  const { schemaState, schemaDispatch } = useContext(SchemaContext) as {
+    schemaState: SchemaState;
+    schemaDispatch: (x: SchemaAction) => any;
+  };
 
   useEffect(() => {
     if (modalState.showZenMode) {
@@ -65,10 +71,31 @@ const ZenMode = () => {
     monaco.editor.setTheme("my-dark");
   }, []);
 
+  const handleEditorChange = useCallback(
+    (value: any, event: any) => {
+      schemaDispatch({
+        type: schemaActions.UPDATE_SCHEMA,
+        payload: {
+          id: schemaState.activeId,
+          schemaDraft: value,
+        },
+      });
+    },
+    [schemaState, schemaActions]
+  );
+
   const handleClose = useCallback(() => {
     toggleFullScreen(ref);
     modalDispatch({ type: modalActions.CLOSE_ZEN_MODE_MODAL });
   }, [ref]);
+
+  const getCurrentDraft = useMemo(() => {
+    const index = schemaState.schemas.findIndex(
+      (e) => e.id === schemaState.activeId
+    );
+    const current = schemaState.schemas[index]?.schema;
+    return current;
+  }, [schemaState]);
 
   if (!modalState.showZenMode) {
     return null;
@@ -84,9 +111,11 @@ const ZenMode = () => {
 
         <Editor
           height="90vh"
+          defaultValue={getCurrentDraft}
           defaultLanguage="json"
           theme="my-dark"
           onMount={handleEditorDidMount}
+          onChange={handleEditorChange}
           options={{
             minimap: {
               enabled: false,

@@ -48,11 +48,9 @@ const reducer: SchemaReducer = (state, action) => {
       break;
 
     case schemaActions.DELETE_SCHEMA:
-      if (state.activeId === action.payload.schema!.id) state.activeId = "";
+      if (state.activeId === action.payload.id) state.activeId = "";
 
-      state.schemas = state.schemas.filter(
-        (e) => e.id !== action.payload.schema!.id
-      );
+      state.schemas = state.schemas.filter((e) => e.id !== action.payload.id);
 
       newState = { ...state };
       break;

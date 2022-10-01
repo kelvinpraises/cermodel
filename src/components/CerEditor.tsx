@@ -7,7 +7,7 @@ import { schemaActions, SchemaContext } from "../state/schema";
 import UpdateSchema from "./modals/UpdateSchema";
 
 const SEditorRest = styled.div`
-  width: 28rem;
+  width: 29rem;
   height: 90vh;
   border: ${({ theme }) => `3px dashed ${theme.modal}`};
   border-radius: 1.5rem;
@@ -64,16 +64,31 @@ const Simg = styled.img`
 const CerEditor = () => {
   const [showEditor, setShowEditor] = useState(false);
 
-  const { modalDispatch } = useContext(ModalContext) as { modalDispatch: any };
+  const [disposeEditor, setDisposeEditor] = useState(false);
+
+  const { modalState, modalDispatch } = useContext(ModalContext) as {
+    modalState: ModalState;
+    modalDispatch: any;
+  };
 
   const { schemaState, schemaDispatch } = useContext(SchemaContext) as {
     schemaState: SchemaState;
     schemaDispatch: (x: SchemaAction) => any;
   };
 
+  // Shows the editor if there's an active schema id.
   useEffect(() => {
-    if (schemaState.activeId) setShowEditor(true);
+    schemaState.activeId === "" ? setShowEditor(false) : setShowEditor(true);
   }, [schemaState]);
+
+  // Disposes editor and rerenders so it gets current draft edited in zen mode.
+  useEffect(() => {
+    if (modalState.showZenMode) {
+      setDisposeEditor(true);
+    } else {
+      setDisposeEditor(false);
+    }
+  }, [modalState]);
 
   const handleEditorDidMount = useCallback((editor: any, monaco: any) => {
     monaco.editor.defineTheme("my-dark", JSON.parse(JSON.stringify(theme)));
@@ -101,9 +116,26 @@ const CerEditor = () => {
     return current;
   }, [schemaState]);
 
+  const getCurrentDraft = useMemo(() => {
+    const index = schemaState.schemas.findIndex(
+      (e) => e.id === schemaState.activeId
+    );
+    const current = schemaState.schemas[index]?.schema;
+    return current;
+  }, [schemaState]);
+
   const handleUpdateSchema = useCallback(() => {
     modalDispatch({ type: modalActions.OPEN_UPDATE_SCHEMA_MODAL });
   }, []);
+
+  const handleDeleteSchema = useCallback(() => {
+    schemaDispatch({
+      type: schemaActions.DELETE_SCHEMA,
+      payload: {
+        id: schemaState.activeId,
+      },
+    });
+  }, [schemaState]);
 
   const handleFullScreen = useCallback(() => {
     modalDispatch({ type: modalActions.OPEN_ZEN_MODE_MODAL });
@@ -119,26 +151,17 @@ const CerEditor = () => {
         <SEditor>
           <UpdateSchema initialState={getCurrentSchema} />
 
-          <Editor
-            height="100vh"
-            defaultLanguage="json"
-            onChange={handleEditorChange}
-            theme="my-dark"
-            onMount={handleEditorDidMount}
-            options={{
-              minimap: {
-                enabled: false,
-              },
-              fontSize: 14,
-              wordWrap: "off",
-              folding: false,
-            }}
+          <RenderEditor
+            disposeEditor={disposeEditor}
+            getCurrentDraft={getCurrentDraft}
+            handleEditorChange={handleEditorChange}
+            handleEditorDidMount={handleEditorDidMount}
           />
 
           <SFloat>
             <STitle onClick={handleUpdateSchema}>EnvfyProtocolState</STitle>
             <div style={{ flex: 1 }} />
-            <Simg src="delete.svg" alt="" />
+            <Simg onClick={handleDeleteSchema} src="delete.svg" alt="" />
             <Simg onClick={handleFullScreen} src="fullscreen.svg" alt="" />
           </SFloat>
         </SEditor>
@@ -146,4 +169,40 @@ const CerEditor = () => {
     </>
   );
 };
+
 export default CerEditor;
+
+interface IRenderEditor {
+  disposeEditor: boolean;
+  getCurrentDraft: string;
+  handleEditorChange: (value: any, event: any) => void;
+  handleEditorDidMount: (editor: any, monaco: any) => void;
+}
+const RenderEditor: React.FC<IRenderEditor> = ({
+  disposeEditor,
+  getCurrentDraft,
+  handleEditorChange,
+  handleEditorDidMount,
+}) => {
+  if (disposeEditor) return null;
+
+  return (
+    <Editor
+      height="100%"
+      defaultValue={getCurrentDraft}
+      defaultLanguage="json"
+      onChange={handleEditorChange}
+      theme="my-dark"
+      keepCurrentModel={false}
+      onMount={handleEditorDidMount}
+      options={{
+        minimap: {
+          enabled: false,
+        },
+        fontSize: 14,
+        wordWrap: "off",
+        folding: false,
+      }}
+    />
+  );
+};
