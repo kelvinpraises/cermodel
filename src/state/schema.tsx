@@ -79,7 +79,7 @@ const reducer: SchemaReducer = (state, action) => {
         ...state.schemas[index],
         schemaDetails: {
           ...state.schemas[index].schemaDetails,
-          name: value,
+          [name]: value,
         },
       };
 

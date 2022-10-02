@@ -1,7 +1,7 @@
 import { ChangeEvent, useCallback, useContext } from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../../state/modal";
-import { SchemaContext } from "../../state/schema";
+import { schemaActions, SchemaContext } from "../../state/schema";
 import Text from "../Text";
 
 interface ModelBoxProps {
@@ -10,7 +10,7 @@ interface ModelBoxProps {
 
 interface ISchemaDetails {
   schema: Schema;
-  handleInputChange: (e: ChangeEvent<HTMLInputElement>) => {};
+  handleInputChange: (e: ChangeEvent<HTMLInputElement>, id: string) => void;
 }
 
 const SModal = styled.div`
@@ -80,11 +80,11 @@ const Sp2 = styled.p`
   line-height: 2rem;
 `;
 
-const SSchemaDetailsBox = styled.div`
+const SSchemaDetailsBox = styled.div<{ color: string }>`
   width: 30rem;
   height: 34rem;
   background-color: black;
-  border: 3px solid #9b33c3;
+  border: ${({ color }) => `3px solid ${color}`};
   border-radius: 20px;
   padding: 2rem;
   margin-bottom: 3rem;
@@ -181,6 +181,22 @@ const DownloadModel = () => {
     modalDispatch({ type: modalActions.CLOSE_DOWNLOAD_MODAL });
   }, []);
 
+  const handleInputChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>, id: string) => {
+      console.log(e.target.name, e.target.value);
+
+      schemaDispatch({
+        type: schemaActions.CHANGE_INPUT,
+        payload: {
+          id,
+          name: e.target.name,
+          value: e.target.value,
+        } as SchemaPayload,
+      });
+    },
+    []
+  );
+
   if (!modalState.showDownload) {
     return null;
   }
@@ -202,7 +218,11 @@ const DownloadModel = () => {
               <SSchemaDetails>
                 <Sp>Schema Details</Sp>
                 {schemaState.schemas.map((schema) => (
-                  <SchemaDetails schema={schema} handleInputChange={handleInputChange} />
+                  <SchemaDetails
+                    key={schema.id}
+                    schema={schema}
+                    handleInputChange={handleInputChange}
+                  />
                 ))}
               </SSchemaDetails>
               <SRunDeploy>
@@ -221,14 +241,16 @@ const SchemaDetails: React.FC<ISchemaDetails> = ({
   schema,
   handleInputChange,
 }) => {
+  console.log(schema);
+
   return (
-    <SSchemaDetailsBox>
-      <SSchemaHeader>EnvfyProtocolState</SSchemaHeader>
+    <SSchemaDetailsBox color={schema.borderColor}>
+      <SSchemaHeader>{schema?.schemaDetails?.schemaAlias}</SSchemaHeader>
       <SBoxTitle>Name</SBoxTitle>
       <SInput
         type="text"
         value={schema.schemaDetails.name}
-        onChange={handleInputChange}
+        onChange={(e) => handleInputChange(e, schema.id)}
         name="name"
         autoComplete="off"
       />
@@ -236,7 +258,7 @@ const SchemaDetails: React.FC<ISchemaDetails> = ({
       <SInput
         type="text"
         value={schema.schemaDetails.description}
-        onChange={handleInputChange}
+        onChange={(e) => handleInputChange(e, schema.id)}
         name="description"
         autoComplete="off"
       />
@@ -244,7 +266,7 @@ const SchemaDetails: React.FC<ISchemaDetails> = ({
       <SInput
         type="text"
         value={schema.schemaDetails.schemaAlias}
-        onChange={handleInputChange}
+        onChange={(e) => handleInputChange(e, schema.id)}
         name="schemaAlias"
         autoComplete="off"
       />
@@ -252,7 +274,7 @@ const SchemaDetails: React.FC<ISchemaDetails> = ({
       <SInput
         type="text"
         value={schema.schemaDetails.definitionAlias}
-        onChange={handleInputChange}
+        onChange={(e) => handleInputChange(e, schema.id)}
         name="definitionAlias"
         autoComplete="off"
       />
