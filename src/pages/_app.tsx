@@ -49,7 +49,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const settingsState = {
     didSeedKey: "",
     ceramicNode: "https://ceramic-clay.3boxlabs.com",
-    serverEndpoint: "",
+    serverEndpoint: "https://glossy-bald-diver.glitch.me/deploy-models",
     autoAssignBorderColor: true,
     enableAdvancedView: false,
   };

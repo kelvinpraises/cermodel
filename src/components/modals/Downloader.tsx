@@ -339,9 +339,7 @@ const RunDeploy = () => {
   };
 
   const handleModelDeploy = useCallback(async () => {
-    setModelState((prev) => {
-      return { ...prev, loading: true };
-    });
+    setModelState({ data: [], loading: true });
 
     let headersList = {
       Accept: "*/*",
