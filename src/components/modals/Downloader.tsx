@@ -2,11 +2,9 @@ import { ChangeEvent, useCallback, useContext } from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../../state/modal";
 import { schemaActions, SchemaContext } from "../../state/schema";
+import { SettingsContext } from "../../state/setting";
+import jsonSyntaxHighlight from "../../utils/jsonSyntaxHighlight";
 import Text from "../Text";
-
-interface ModelBoxProps {
-  height: string;
-}
 
 interface ISchemaDetails {
   schema: Schema;
@@ -137,9 +135,12 @@ const ButtonText = styled.p`
   font-size: 1.25rem;
 `;
 
-const SModelBox = styled.div<ModelBoxProps>`
+const SModelBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 30rem;
-  height: ${({ height }) => height};
+  min-height: 10rem;
   background-color: black;
   border-radius: 1.25rem;
   padding: 1.25rem;
@@ -150,6 +151,27 @@ const SModelHead = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+
+const SModalBoxContent = styled.pre`
+  overflow: scroll;
+  color: white;
+
+  .string {
+    color: green;
+  }
+  .number {
+    color: darkorange;
+  }
+  .boolean {
+    color: blue;
+  }
+  .null {
+    color: magenta;
+  }
+  .key {
+    color: red;
+  }
 `;
 
 const Simg = styled.img`
@@ -226,7 +248,6 @@ const DownloadModel = () => {
                 ))}
               </SSchemaDetails>
               <SRunDeploy>
-                <Sp> Run Deploy</Sp>
                 <RunDeploy />
               </SRunDeploy>
             </>
@@ -283,23 +304,76 @@ const SchemaDetails: React.FC<ISchemaDetails> = ({
 };
 
 const RunDeploy = () => {
+  const { schemaState } = useContext(SchemaContext) as {
+    schemaState: SchemaState;
+  };
+
+  const { settingsState } = useContext(SettingsContext) as {
+    settingsState: SettingsState;
+  };
+
+  const { didSeedKey, ceramicNode, serverEndpoint } = settingsState;
+
+  const { modalDispatch } = useContext(ModalContext) as {
+    modalDispatch: any;
+  };
+
+  const handleDeployModels = useCallback(() => {
+    schemaState;
+  }, []);
+
+  const handleShowSettings = useCallback(() => {
+    modalDispatch({
+      type: modalActions.CLOSE_DOWNLOAD_MODAL,
+    });
+    modalDispatch({
+      type: modalActions.OPEN_SETTING_MODAL,
+    });
+  }, []);
+
+  var obj = {
+    a: 1,
+    b: "foo",
+    c: [false, "false", null, "null", { d: { e: 1.3e5, f: "1.3e5" } }],
+  };
+  var str = JSON.stringify(JSON.parse(JSON.stringify(obj)), undefined, 4);
+
   return (
     <SRunDeployBox>
+      <Sp> Run Deploy</Sp>
+      <SModelBox onClick={handleShowSettings} style={{ cursor: "pointer" }}>
+        <SBoxTitle>
+          DID Seed Key: <SModalBoxContent>{didSeedKey}</SModalBoxContent>
+        </SBoxTitle>
+        <SBoxTitle>
+          Ceramic Node: <SModalBoxContent>{ceramicNode}</SModalBoxContent>
+        </SBoxTitle>
+        <SBoxTitle>
+          Server Endpoint: <SModalBoxContent>{serverEndpoint}</SModalBoxContent>
+        </SBoxTitle>
+      </SModelBox>
       <DeployButton>
         <ButtonText> DEPLOY</ButtonText>
       </DeployButton>
+
       <Sp>Model Aliases</Sp>
-      <SModelBox height={"20.5rem"}>
+      <SModelBox>
         <SModelHead>
           <SBoxTitle>All Model Alias</SBoxTitle>
           <SBoxTitle>COPY</SBoxTitle>
         </SModelHead>
+        <SModalBoxContent
+          dangerouslySetInnerHTML={{
+            __html: jsonSyntaxHighlight(str),
+          }}
+        />
       </SModelBox>
-      <SModelBox height={"9.7rem"}>
+      <SModelBox>
         <SModelHead>
           <SBoxTitle>All Model Alias</SBoxTitle>
           <SBoxTitle>COPY</SBoxTitle>
         </SModelHead>
+        <SModalBoxContent></SModalBoxContent>
       </SModelBox>
     </SRunDeployBox>
   );

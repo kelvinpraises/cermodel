@@ -1,7 +1,6 @@
 import Editor from "@monaco-editor/react";
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import theme from "../../public/monaco-theme.json";
 import Text from "../components/Text";
 import { schemaActions } from "../state/schema";
 
