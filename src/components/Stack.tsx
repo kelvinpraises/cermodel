@@ -24,7 +24,7 @@ const Sp = styled.p`
   line-height: 2rem;
 `;
 
-const test = () => {
+const Stack = () => {
   const { schemaState, schemaDispatch } = useContext(SchemaContext) as {
     schemaState: SchemaState;
     schemaDispatch: (x: SchemaAction) => any;
@@ -122,4 +122,4 @@ const test = () => {
   );
 };
 
-export default test;
+export default Stack;
