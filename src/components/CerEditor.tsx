@@ -155,10 +155,10 @@ const CerEditor = () => {
       {!showEditor ? (
         <SEditorRest>
           {schemaState.schemas.length === 0 ? (
-            <Sp>Click The Green Button To Create A New Project</Sp>
+            <Sp>Click The Green Button To Create A New Schema</Sp>
           ) : (
             <Sp>
-              Choose An Existing Project Card In The Stack Or Add A New One
+              Choose An Existing Schema Card In The Stack Or Add A New One
             </Sp>
           )}
         </SEditorRest>

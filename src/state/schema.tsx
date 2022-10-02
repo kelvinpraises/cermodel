@@ -3,6 +3,8 @@ import { createContext, useReducer } from "react";
 const reducer: SchemaReducer = (state, action) => {
   let newState: SchemaState;
   let index;
+  let name;
+  let value;
 
   switch (action.type) {
     case schemaActions.CREATE_SCHEMA:
@@ -53,6 +55,7 @@ const reducer: SchemaReducer = (state, action) => {
 
     case schemaActions.UPDATE_DRAFT:
       index = state.schemas.findIndex((e) => e.id === action.payload.id);
+      name;
 
       if (index) {
         newState = { ...state };
@@ -62,6 +65,22 @@ const reducer: SchemaReducer = (state, action) => {
       state.schemas[index] = {
         ...state.schemas[index],
         schema: action.payload.schemaDraft!,
+      };
+
+      newState = { ...state };
+      break;
+
+    case schemaActions.CHANGE_INPUT:
+      index = state.schemas.findIndex((e) => e.id === action.payload.id);
+      name = action.payload.name!;
+      value = action.payload.value!;
+
+      state.schemas[index] = {
+        ...state.schemas[index],
+        schemaDetails: {
+          ...state.schemas[index].schemaDetails,
+          name: value,
+        },
       };
 
       newState = { ...state };
@@ -97,5 +116,6 @@ export const schemaActions = {
   UPDATE_BORDER_COLOR: "UPDATE_BORDER_COLOR",
   REPLACE_SCHEMA: "REPLACE_SCHEMA",
   UPDATE_DRAFT: "UPDATE_DRAFT",
+  CHANGE_INPUT: "CHANGE_INPUT",
   DELETE_SCHEMA: "DELETE_SCHEMA",
 };

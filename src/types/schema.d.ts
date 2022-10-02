@@ -20,6 +20,8 @@ interface SchemaPayload {
   id?: string;
   schemaDraft?: string;
   borderColor?: string;
+  name?: "name" | "description" | "schemaAlias" | "definitionAlias";
+  value?: string;
 }
 
 interface SchemaAction {

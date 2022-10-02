@@ -103,7 +103,7 @@ const test = () => {
     <>
       {!showStack ? (
         <SEditorRest>
-          <Sp>Click The Green Button To Add a New Editor</Sp>
+          <Sp>Click The Green Button To Add a New Schema Editor</Sp>
         </SEditorRest>
       ) : (
         <SContainer>

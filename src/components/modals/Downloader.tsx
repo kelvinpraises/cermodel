@@ -1,10 +1,16 @@
-import { useCallback, useContext } from "react";
+import { ChangeEvent, useCallback, useContext } from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../../state/modal";
+import { SchemaContext } from "../../state/schema";
 import Text from "../Text";
 
 interface ModelBoxProps {
   height: string;
+}
+
+interface ISchemaDetails {
+  schema: Schema;
+  handleInputChange: (e: ChangeEvent<HTMLInputElement>) => {};
 }
 
 const SModal = styled.div`
@@ -66,6 +72,12 @@ const Sp = styled.p`
   font-size: 1.5rem;
   padding-top: 2rem;
   padding-bottom: 1rem;
+`;
+
+const Sp2 = styled.p`
+  color: ${({ theme }) => theme.text3};
+  text-align: center;
+  line-height: 2rem;
 `;
 
 const SSchemaDetailsBox = styled.div`
@@ -147,10 +159,22 @@ const Simg = styled.img`
   }
 `;
 
+const SEmptyState = styled.div`
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 75%;
+`;
+
 const DownloadModel = () => {
   const { modalState, modalDispatch } = useContext(ModalContext) as {
     modalState: ModalState;
     modalDispatch: any;
+  };
+
+  const { schemaState, schemaDispatch } = useContext(SchemaContext) as {
+    schemaState: SchemaState;
+    schemaDispatch: (x: SchemaAction) => any;
   };
 
   const handleClose = useCallback(() => {
@@ -169,35 +193,69 @@ const DownloadModel = () => {
           <Simg onClick={handleClose} src="close.svg" alt="" />
         </SHeader>
         <SBody>
-          <SSchemaDetails>
-            <Sp>Schema Details</Sp>
-            <SchemaDetails />
-            <SchemaDetails />
-          </SSchemaDetails>
-          <SRunDeploy>
-            <Sp> Run Deploy</Sp>
-            <RunDeploy />
-          </SRunDeploy>
+          {schemaState.schemas.length === 0 ? (
+            <SEmptyState>
+              <Sp2>Please Create A Schema To Start Deploying</Sp2>
+            </SEmptyState>
+          ) : (
+            <>
+              <SSchemaDetails>
+                <Sp>Schema Details</Sp>
+                {schemaState.schemas.map((schema) => (
+                  <SchemaDetails schema={schema} handleInputChange={handleInputChange} />
+                ))}
+              </SSchemaDetails>
+              <SRunDeploy>
+                <Sp> Run Deploy</Sp>
+                <RunDeploy />
+              </SRunDeploy>
+            </>
+          )}
         </SBody>
       </SSchema>
     </SModal>
   );
 };
 
-export default DownloadModel;
-
-const SchemaDetails = () => {
+const SchemaDetails: React.FC<ISchemaDetails> = ({
+  schema,
+  handleInputChange,
+}) => {
   return (
     <SSchemaDetailsBox>
       <SSchemaHeader>EnvfyProtocolState</SSchemaHeader>
       <SBoxTitle>Name</SBoxTitle>
-      <SInput></SInput>
+      <SInput
+        type="text"
+        value={schema.schemaDetails.name}
+        onChange={handleInputChange}
+        name="name"
+        autoComplete="off"
+      />
       <SBoxTitle>Description</SBoxTitle>
-      <SInput></SInput>
+      <SInput
+        type="text"
+        value={schema.schemaDetails.description}
+        onChange={handleInputChange}
+        name="description"
+        autoComplete="off"
+      />
       <SBoxTitle>Schema Alias</SBoxTitle>
-      <SInput></SInput>
+      <SInput
+        type="text"
+        value={schema.schemaDetails.schemaAlias}
+        onChange={handleInputChange}
+        name="schemaAlias"
+        autoComplete="off"
+      />
       <SBoxTitle>Definition Alias</SBoxTitle>
-      <SInput></SInput>
+      <SInput
+        type="text"
+        value={schema.schemaDetails.definitionAlias}
+        onChange={handleInputChange}
+        name="definitionAlias"
+        autoComplete="off"
+      />
     </SSchemaDetailsBox>
   );
 };
@@ -224,3 +282,5 @@ const RunDeploy = () => {
     </SRunDeployBox>
   );
 };
+
+export default DownloadModel;
