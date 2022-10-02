@@ -1,14 +1,22 @@
-import { ChangeEvent, useCallback, useContext } from "react";
+import { ChangeEvent, useCallback, useContext, useState } from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../../state/modal";
 import { schemaActions, SchemaContext } from "../../state/schema";
 import { SettingsContext } from "../../state/setting";
+import copyTextToClipboard from "../../utils/copyTextToClipboard";
+import jsonFormatter from "../../utils/jsonFormatter";
 import jsonSyntaxHighlight from "../../utils/jsonSyntaxHighlight";
 import Text from "../Text";
+import axios from "axios";
 
 interface ISchemaDetails {
   schema: Schema;
   handleInputChange: (e: ChangeEvent<HTMLInputElement>, id: string) => void;
+}
+
+interface IModelAliasViewer {
+  title: string;
+  jsonObj: any;
 }
 
 const SModal = styled.div`
@@ -100,6 +108,13 @@ const SBoxTitle = styled.p`
   padding-bottom: 0.43rem;
 `;
 
+const SBoxTitleHover = styled(SBoxTitle)`
+  :hover {
+    color: ${({ theme }) => theme.accent2};
+    cursor: pointer;
+  }
+`;
+
 const SInput = styled.input`
   font-family: monospace;
   font-size: 1.125rem;
@@ -158,19 +173,19 @@ const SModalBoxContent = styled.pre`
   color: white;
 
   .string {
-    color: green;
+    color: #98d698;
   }
   .number {
-    color: darkorange;
+    color: #d88827;
   }
   .boolean {
-    color: blue;
+    color: #d88827;
   }
   .null {
-    color: magenta;
+    color: #d88827;
   }
   .key {
-    color: red;
+    color: #89d6ff;
   }
 `;
 
@@ -304,6 +319,11 @@ const SchemaDetails: React.FC<ISchemaDetails> = ({
 };
 
 const RunDeploy = () => {
+  const [modelState, setModelState] = useState({
+    loading: false,
+    data: [],
+  });
+
   const { schemaState } = useContext(SchemaContext) as {
     schemaState: SchemaState;
   };
@@ -318,8 +338,44 @@ const RunDeploy = () => {
     modalDispatch: any;
   };
 
-  const handleDeployModels = useCallback(() => {
-    schemaState;
+  const handleModelDeploy = useCallback(async () => {
+    setModelState((prev) => {
+      return { ...prev, loading: true };
+    });
+
+    let headersList = {
+      Accept: "*/*",
+      "Content-Type": "application/json",
+    };
+
+    const modelDetails = schemaState.schemas.map((e) => {
+      const { schema, schemaDetails: details } = e;
+      const { name, description, definitionAlias, schemaAlias } = details;
+
+      return {
+        schema,
+        name,
+        description,
+        schemaAlias,
+        definitionAlias,
+      };
+    });
+
+    let bodyContent = JSON.stringify({
+      didSeedKey,
+      ceramicNode,
+      modelDetails,
+    });
+
+    let reqOptions = {
+      url: serverEndpoint,
+      method: "POST",
+      headers: headersList,
+      data: bodyContent,
+    };
+
+    let response = await axios.request(reqOptions);
+    setModelState({ loading: false, data: response.data });
   }, []);
 
   const handleShowSettings = useCallback(() => {
@@ -331,51 +387,73 @@ const RunDeploy = () => {
     });
   }, []);
 
-  var obj = {
-    a: 1,
-    b: "foo",
-    c: [false, "false", null, "null", { d: { e: 1.3e5, f: "1.3e5" } }],
-  };
-  var str = JSON.stringify(JSON.parse(JSON.stringify(obj)), undefined, 4);
-
   return (
     <SRunDeployBox>
-      <Sp> Run Deploy</Sp>
+      <Sp>Run Deploy</Sp>
+
       <SModelBox onClick={handleShowSettings} style={{ cursor: "pointer" }}>
         <SBoxTitle>
-          DID Seed Key: <SModalBoxContent>{didSeedKey}</SModalBoxContent>
+          DID Seed Key: <span style={{ color: "white" }}>{didSeedKey}</span>
         </SBoxTitle>
         <SBoxTitle>
-          Ceramic Node: <SModalBoxContent>{ceramicNode}</SModalBoxContent>
+          Ceramic Node: <span style={{ color: "white" }}>{ceramicNode}</span>
         </SBoxTitle>
         <SBoxTitle>
-          Server Endpoint: <SModalBoxContent>{serverEndpoint}</SModalBoxContent>
+          Server Endpoint:{" "}
+          <span style={{ color: "white" }}>{serverEndpoint}</span>
         </SBoxTitle>
       </SModelBox>
-      <DeployButton>
-        <ButtonText> DEPLOY</ButtonText>
+
+      <DeployButton onClick={handleModelDeploy}>
+        <ButtonText>
+          {modelState.loading ? "Processing..." : "DEPLOY"}
+        </ButtonText>
       </DeployButton>
 
-      <Sp>Model Aliases</Sp>
-      <SModelBox>
-        <SModelHead>
-          <SBoxTitle>All Model Alias</SBoxTitle>
-          <SBoxTitle>COPY</SBoxTitle>
-        </SModelHead>
-        <SModalBoxContent
-          dangerouslySetInnerHTML={{
-            __html: jsonSyntaxHighlight(str),
-          }}
-        />
-      </SModelBox>
-      <SModelBox>
-        <SModelHead>
-          <SBoxTitle>All Model Alias</SBoxTitle>
-          <SBoxTitle>COPY</SBoxTitle>
-        </SModelHead>
-        <SModalBoxContent></SModalBoxContent>
-      </SModelBox>
+      {modelState.data.length > 0 && (
+        <>
+          <Sp>Model Aliases</Sp>
+
+          {modelState.data.map((e, i) => {
+            const title = Object.keys((e as any).schemas)[0];
+
+            return <ModelAliasViewer key={i} title={title} jsonObj={e} />;
+          })}
+        </>
+      )}
     </SRunDeployBox>
+  );
+};
+
+const ModelAliasViewer: React.FC<IModelAliasViewer> = ({ title, jsonObj }) => {
+  const [copyText, setCopyText] = useState("COPY");
+
+  const handleCopyText = useCallback(async (jsonObj: any) => {
+    try {
+      await copyTextToClipboard(jsonFormatter({ jsonObj }));
+      setCopyText("COPIED");
+      setTimeout(() => {
+        setCopyText("COPY");
+      }, 1000);
+    } catch (error) {
+      console.error("error");
+    }
+  }, []);
+
+  return (
+    <SModelBox>
+      <SModelHead>
+        <SBoxTitle>{title}</SBoxTitle>
+        <SBoxTitleHover onClick={async () => await handleCopyText(jsonObj)}>
+          {copyText}
+        </SBoxTitleHover>
+      </SModelHead>
+      <SModalBoxContent
+        dangerouslySetInnerHTML={{
+          __html: jsonSyntaxHighlight(jsonFormatter({ jsonObj })),
+        }}
+      />
+    </SModelBox>
   );
 };
 

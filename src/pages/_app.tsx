@@ -48,7 +48,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   const settingsState = {
     didSeedKey: "",
-    ceramicNode: "",
+    ceramicNode: "https://ceramic-clay.3boxlabs.com",
     serverEndpoint: "",
     autoAssignBorderColor: true,
     enableAdvancedView: false,
