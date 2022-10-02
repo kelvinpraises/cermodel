@@ -6,6 +6,13 @@ import { modalActions, ModalContext } from "../state/modal";
 import { schemaActions, SchemaContext } from "../state/schema";
 import UpdateSchema from "./modals/UpdateSchema";
 
+interface IRenderEditor {
+  disposeEditor: boolean;
+  getCurrentDraft: string;
+  handleEditorChange: (value: any, event: any) => void;
+  handleEditorDidMount: (editor: any, monaco: any) => void;
+}
+
 const SEditorRest = styled.div`
   width: 29rem;
   height: 90vh;
@@ -33,6 +40,7 @@ const SEditor = styled.div`
 const Sp = styled.p`
   color: ${({ theme }) => theme.text3};
   text-align: center;
+  line-height: 2rem;
 `;
 
 const SFloat = styled.div`
@@ -81,14 +89,15 @@ const CerEditor = () => {
     schemaState.activeId === "" ? setShowEditor(false) : setShowEditor(true);
   }, [schemaState]);
 
-  // Disposes editor and rerenders so it gets current draft edited in zen mode.
+  // Disposes editor and rerenders so it always shows the active id's schema draft
   useEffect(() => {
-    if (modalState.showZenMode) {
-      setDisposeEditor(true);
-    } else {
-      setDisposeEditor(false);
-    }
-  }, [modalState]);
+    setDisposeEditor(() => {
+      setTimeout(() => {
+        setDisposeEditor(false);
+      }, 1);
+      return true;
+    });
+  }, [modalState.showZenMode, schemaState.activeId]);
 
   const handleEditorDidMount = useCallback((editor: any, monaco: any) => {
     monaco.editor.defineTheme("my-dark", JSON.parse(JSON.stringify(theme)));
@@ -98,7 +107,7 @@ const CerEditor = () => {
   const handleEditorChange = useCallback(
     (value: any, event: any) => {
       schemaDispatch({
-        type: schemaActions.UPDATE_SCHEMA,
+        type: schemaActions.UPDATE_DRAFT,
         payload: {
           id: schemaState.activeId,
           schemaDraft: value,
@@ -125,7 +134,7 @@ const CerEditor = () => {
   }, [schemaState]);
 
   const handleUpdateSchema = useCallback(() => {
-    modalDispatch({ type: modalActions.OPEN_UPDATE_SCHEMA_MODAL });
+    modalDispatch({ type: modalActions.OPEN_UPDATE_DRAFT_MODAL });
   }, []);
 
   const handleDeleteSchema = useCallback(() => {
@@ -145,7 +154,13 @@ const CerEditor = () => {
     <>
       {!showEditor ? (
         <SEditorRest>
-          <Sp>Click The Green Button To Start Editing</Sp>
+          {schemaState.schemas.length === 0 ? (
+            <Sp>Click The Green Button To Create A New Project</Sp>
+          ) : (
+            <Sp>
+              Choose An Existing Project Card In The Stack Or Add A New One
+            </Sp>
+          )}
         </SEditorRest>
       ) : (
         <SEditor>
@@ -159,7 +174,9 @@ const CerEditor = () => {
           />
 
           <SFloat>
-            <STitle onClick={handleUpdateSchema}>EnvfyProtocolState</STitle>
+            <STitle onClick={handleUpdateSchema}>
+              {getCurrentSchema?.schemaDetails?.schemaAlias}
+            </STitle>
             <div style={{ flex: 1 }} />
             <Simg onClick={handleDeleteSchema} src="delete.svg" alt="" />
             <Simg onClick={handleFullScreen} src="fullscreen.svg" alt="" />
@@ -170,14 +187,6 @@ const CerEditor = () => {
   );
 };
 
-export default CerEditor;
-
-interface IRenderEditor {
-  disposeEditor: boolean;
-  getCurrentDraft: string;
-  handleEditorChange: (value: any, event: any) => void;
-  handleEditorDidMount: (editor: any, monaco: any) => void;
-}
 const RenderEditor: React.FC<IRenderEditor> = ({
   disposeEditor,
   getCurrentDraft,
@@ -206,3 +215,5 @@ const RenderEditor: React.FC<IRenderEditor> = ({
     />
   );
 };
+
+export default CerEditor;

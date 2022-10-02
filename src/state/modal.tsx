@@ -60,14 +60,14 @@ const reducer: ModalReducer = (state, action) => {
       };
       break;
 
-    case modalActions.OPEN_UPDATE_SCHEMA_MODAL:
+    case modalActions.OPEN_UPDATE_DRAFT_MODAL:
       newState = {
         ...state,
         showUpdateSchema: true,
       };
       break;
 
-    case modalActions.CLOSE_UPDATE_SCHEMA_MODAL:
+    case modalActions.CLOSE_UPDATE_DRAFT_MODAL:
       newState = {
         ...state,
         showUpdateSchema: false,
@@ -124,8 +124,8 @@ export const modalActions = {
   OPEN_SCHEMA_MODAL: "OPEN_SCHEMA_MODAL",
   CLOSE_SCHEMA_MODAL: "CLOSE_SCHEMA_MODAL",
 
-  OPEN_UPDATE_SCHEMA_MODAL: "OPEN_UPDATE_SCHEMA_MODAL",
-  CLOSE_UPDATE_SCHEMA_MODAL: "CLOSE_UPDATE_SCHEMA_MODAL",
+  OPEN_UPDATE_DRAFT_MODAL: "OPEN_UPDATE_DRAFT_MODAL",
+  CLOSE_UPDATE_DRAFT_MODAL: "CLOSE_UPDATE_DRAFT_MODAL",
 
   OPEN_DOWNLOAD_MODAL: "OPEN_DOWNLOAD_MODAL",
   CLOSE_DOWNLOAD_MODAL: "CLOSE_DOWNLOAD_MODAL",

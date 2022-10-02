@@ -19,6 +19,7 @@ interface SchemaPayload {
   schema?: Schema;
   id?: string;
   schemaDraft?: string;
+  borderColor?: string;
 }
 
 interface SchemaAction {

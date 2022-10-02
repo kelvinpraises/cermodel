@@ -6,19 +6,16 @@ const reducer: SettingsReducer = (state, action) => {
     case settingsActions.CHANGE_INPUT:
       newState = {
         ...state,
-        [action.inputPayload!.name]: action.inputPayload!.value,
-      };
-      break;
-    case settingsActions.CLEAR_STATE:
-      newState = {
-        didSeedKey: "",
-        ceramicNode: "",
-        serverEndpoint: "",
+        [action.payload.name!]: action.payload.value,
       };
       break;
 
+    case settingsActions.RESET_STATE:
+      newState = { ...action.payload.state! };
+      break;
+
     default:
-      newState = state;
+      newState = { ...state };
       break;
   }
 
@@ -33,7 +30,7 @@ export const SettingsProvider: React.FC<SettingsProvider> = ({
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const value = { settingState: state, settingDispatch: dispatch };
+  const value = { settingsState: state, settingsDispatch: dispatch };
 
   return (
     <SettingsContext.Provider value={value}>
@@ -44,5 +41,5 @@ export const SettingsProvider: React.FC<SettingsProvider> = ({
 
 export const settingsActions = {
   CHANGE_INPUT: "CHANGE_INPUT",
-  CLEAR_STATE: "CLEAR_STATE",
+  RESET_STATE: "RESET_STATE",
 };

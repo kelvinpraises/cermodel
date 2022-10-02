@@ -50,6 +50,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     didSeedKey: "",
     ceramicNode: "",
     serverEndpoint: "",
+    autoAssignBorderColor: true,
+    enableAdvancedView: false,
   };
 
   const [theme] = useState("dark");

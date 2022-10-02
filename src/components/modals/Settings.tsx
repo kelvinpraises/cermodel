@@ -1,7 +1,9 @@
-import { useCallback, useContext } from "react";
+import { ChangeEvent, useCallback, useContext } from "react";
 import styled from "styled-components";
 import { modalActions, ModalContext } from "../../state/modal";
+import { settingsActions, SettingsContext } from "../../state/setting";
 import Text from "../Text";
+import SaveChange from "./SaveChange";
 
 const SModal = styled.div`
   position: fixed;
@@ -154,8 +156,36 @@ const Settings = () => {
     modalDispatch: any;
   };
 
+  const { settingsState, settingsDispatch } = useContext(SettingsContext) as {
+    settingsState: SettingsState;
+    settingsDispatch: (x: SettingsAction) => void;
+  };
+
   const handleClose = useCallback(() => {
     modalDispatch({ type: modalActions.CLOSE_SETTING_MODAL });
+  }, []);
+
+  const handleInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    settingsDispatch({
+      type: settingsActions.CHANGE_INPUT,
+      payload: {
+        name: e.target.name,
+        value: e.target.value,
+      } as SettingsPayload,
+    });
+  }, []);
+
+  const handleSaveChanges = useCallback(() => {
+    modalDispatch({ type: modalActions.CLOSE_SETTING_MODAL });
+  }, [modalActions]);
+
+  const handleReset = useCallback((state: SettingsState) => {
+    settingsDispatch({
+      type: settingsActions.RESET_STATE,
+      payload: {
+        state: state,
+      },
+    });
   }, []);
 
   if (!modalState.showSettings) {
@@ -171,16 +201,39 @@ const Settings = () => {
         </SHeader>
         <SBody>
           <STitle>DID Seed Key</STitle>
-          <SInput></SInput>
+          <SInput
+            type="text"
+            value={settingsState.didSeedKey}
+            onChange={handleInputChange}
+            name="didSeedKey"
+            autoComplete="off"
+          />
+
           <STitle>Ceramic Node</STitle>
-          <SInput></SInput>
+          <SInput
+            type="text"
+            value={settingsState.ceramicNode}
+            onChange={handleInputChange}
+            name="ceramicNode"
+            autoComplete="off"
+          />
+
           <STitle>Server Endpoint</STitle>
-          <SInput></SInput>
+          <SInput
+            type="text"
+            value={settingsState.serverEndpoint}
+            onChange={handleInputChange}
+            name="serverEndpoint"
+            autoComplete="off"
+          />
+
           <SFlex>
             <Sp>Auto assign border color</Sp>
-
             <SSwitch>
-              <SCheckInput type="checkbox" />
+              <SCheckInput
+                type="checkbox"
+                checked={settingsState.autoAssignBorderColor}
+              />
               <SSpan></SSpan>
             </SSwitch>
           </SFlex>
@@ -188,12 +241,20 @@ const Settings = () => {
           <SFlex>
             <Sp>Enable advanced view</Sp>
             <SSwitch>
-              <SCheckInput type="checkbox" />
+              <SCheckInput
+                type="checkbox"
+                checked={settingsState.enableAdvancedView}
+              />
               <SSpan></SSpan>
             </SSwitch>
           </SFlex>
         </SBody>
-        {/* <SaveChange state={undefined} saveChanges={} resetChanges={} /> */}
+
+        <SaveChange
+          state={settingsState}
+          saveChanges={() => handleSaveChanges()}
+          resetChanges={(state) => handleReset(state)}
+        />
       </SSchema>
     </SModal>
   );

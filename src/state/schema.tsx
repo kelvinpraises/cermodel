@@ -12,7 +12,7 @@ const reducer: SchemaReducer = (state, action) => {
       };
       break;
 
-    case schemaActions.UPDATE_SCHEMA_DETAILS:
+    case schemaActions.REPLACE_SCHEMA:
       index = state.schemas.findIndex(
         (e) => e.id === action.payload.schema!.id
       );
@@ -30,8 +30,28 @@ const reducer: SchemaReducer = (state, action) => {
       };
       break;
 
-    case schemaActions.UPDATE_SCHEMA:
-      console.log(action.payload.id);
+    case schemaActions.DELETE_SCHEMA:
+      if (state.activeId === action.payload.id) state.activeId = "";
+
+      state.schemas = state.schemas.filter((e) => e.id !== action.payload.id);
+
+      newState = { ...state };
+      break;
+
+    case schemaActions.UPDATE_BORDER_COLOR:
+      index = state.schemas.findIndex((e) => e.id === action.payload.id);
+
+      console.log(action.payload.borderColor!);
+
+      state.schemas[index] = {
+        ...state.schemas[index],
+        borderColor: action.payload.borderColor!,
+      };
+
+      newState = { ...state };
+      break;
+
+    case schemaActions.UPDATE_DRAFT:
       index = state.schemas.findIndex((e) => e.id === action.payload.id);
 
       if (index) {
@@ -43,14 +63,6 @@ const reducer: SchemaReducer = (state, action) => {
         ...state.schemas[index],
         schema: action.payload.schemaDraft!,
       };
-
-      newState = { ...state };
-      break;
-
-    case schemaActions.DELETE_SCHEMA:
-      if (state.activeId === action.payload.id) state.activeId = "";
-
-      state.schemas = state.schemas.filter((e) => e.id !== action.payload.id);
 
       newState = { ...state };
       break;
@@ -82,7 +94,8 @@ export const SchemaProvider: React.FC<SchemaProvider> = ({
 
 export const schemaActions = {
   CREATE_SCHEMA: "CREATE_SCHEMA",
-  UPDATE_SCHEMA_DETAILS: "UPDATE_SCHEMA_DETAILS",
-  UPDATE_SCHEMA: "UPDATE_SCHEMA",
+  UPDATE_BORDER_COLOR: "UPDATE_BORDER_COLOR",
+  REPLACE_SCHEMA: "REPLACE_SCHEMA",
+  UPDATE_DRAFT: "UPDATE_DRAFT",
   DELETE_SCHEMA: "DELETE_SCHEMA",
 };

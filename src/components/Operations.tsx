@@ -22,7 +22,7 @@ const SImg = styled.div`
   transition: 250ms ease-in-out;
   user-select: none;
   :hover {
-    background-color: #ffffff;
+    background-color: #81cc2a;
   }
 `;
 const SDownload = styled.div`

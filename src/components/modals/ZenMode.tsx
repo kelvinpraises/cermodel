@@ -74,7 +74,7 @@ const ZenMode = () => {
   const handleEditorChange = useCallback(
     (value: any, event: any) => {
       schemaDispatch({
-        type: schemaActions.UPDATE_SCHEMA,
+        type: schemaActions.UPDATE_DRAFT,
         payload: {
           id: schemaState.activeId,
           schemaDraft: value,

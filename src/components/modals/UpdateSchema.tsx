@@ -122,15 +122,15 @@ const UpdateSchema: React.FC<IUpdateSchema> = ({ initialState }) => {
   }, []);
 
   const handleModalClose = useCallback(() => {
-    modalDispatch({ type: modalActions.CLOSE_UPDATE_SCHEMA_MODAL });
+    modalDispatch({ type: modalActions.CLOSE_UPDATE_DRAFT_MODAL });
     setSchemaInputState(initialState);
   }, [initialState, modalActions]);
 
   const handleSaveChanges = useCallback(
     (state: Schema) => {
-      modalDispatch({ type: modalActions.CLOSE_UPDATE_SCHEMA_MODAL });
+      modalDispatch({ type: modalActions.CLOSE_UPDATE_DRAFT_MODAL });
       schemaDispatch({
-        type: schemaActions.UPDATE_SCHEMA_DETAILS,
+        type: schemaActions.REPLACE_SCHEMA,
         payload: { schema: state },
       });
       setSchemaInputState(initialState);

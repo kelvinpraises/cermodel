@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import { SchemaContext } from "../state/schema";
 import Card from "./Card";
 
 const SContainer = styled.div`
@@ -8,7 +9,7 @@ const SContainer = styled.div`
 
 const SEditorRest = styled.div`
   height: 80vh;
-  width: 20rem;
+  width: 23rem;
   border: ${({ theme }) => `3px dashed ${theme.modal}`};
   border-radius: 1.5rem;
   display: flex;
@@ -20,20 +21,32 @@ const SEditorRest = styled.div`
 const Sp = styled.p`
   color: ${({ theme }) => theme.text3};
   text-align: center;
+  line-height: 2rem;
 `;
 
-const CardColor = ["#34A853", "#1DA1F2", "#9B33C3", "#1877F2", "#0A66C2"];
-
 const test = () => {
+  const { schemaState, schemaDispatch } = useContext(SchemaContext) as {
+    schemaState: SchemaState;
+    schemaDispatch: (x: SchemaAction) => any;
+  };
+
   const [showCard2, setShowCard2] = useState(false);
   const [showCard4, setShowCard4] = useState(false);
   const [hoverCard2, setHoverCard2] = useState(false);
   const [hoverCard4, setHoverCard4] = useState(false);
 
-  // const show = true;
-  const show = false;
+  const [showStack, setShowStack] = useState(false);
+  const [inactiveSchemas, setInactiveSchemas] = useState<Schema[]>([]);
 
-  const setNeighbourIndex = (index: number) => {
+  // Shows the stack if there's anything in the schemas that isn't the active id.
+  useEffect(() => {
+    const activeId = schemaState.activeId;
+    const schemas = schemaState.schemas.filter((e) => e.id !== activeId);
+    setInactiveSchemas(schemas);
+    schemas.length > 0 ? setShowStack(true) : setShowStack(false);
+  }, [schemaState]);
+
+  const setNeighborIndex = useCallback((index: number) => {
     if (index === 1) {
       setShowCard2(true);
     }
@@ -41,9 +54,9 @@ const test = () => {
     if (index === 5) {
       setShowCard4(true);
     }
-  };
+  }, []);
 
-  const resetNeighbourIndex = (index: number) => {
+  const resetNeighborIndex = useCallback((index: number) => {
     if (index === 1) {
       setShowCard2(false);
     }
@@ -51,9 +64,9 @@ const test = () => {
     if (index === 5) {
       setShowCard4(false);
     }
-  };
+  }, []);
 
-  const setHover = (index: number) => {
+  const setHover = useCallback((index: number) => {
     if (index === 2) {
       setHoverCard2(true);
     }
@@ -61,9 +74,9 @@ const test = () => {
     if (index === 4) {
       setHoverCard4(true);
     }
-  };
+  }, []);
 
-  const resetHover = (index: number) => {
+  const resetHover = useCallback((index: number) => {
     if (index === 2) {
       setHoverCard2(false);
     }
@@ -71,43 +84,38 @@ const test = () => {
     if (index === 4) {
       setHoverCard4(false);
     }
+  }, []);
+
+  const stackControls = {
+    setNeighborIndex,
+    resetNeighborIndex,
+    showCard2,
+    hoverCard2,
+    setHover,
+    resetHover,
+    showCard4,
+    hoverCard4,
   };
+
+  if (schemaState.schemas.length === 0) return <SEditorRest />;
 
   return (
     <>
-      {show ? (
+      {!showStack ? (
         <SEditorRest>
           <Sp>Click The Green Button To Add a New Editor</Sp>
         </SEditorRest>
       ) : (
         <SContainer>
-          <Card
-            color={CardColor[1]}
-            onMouseOver={() => setNeighbourIndex(1)}
-            onMouseOut={() => resetNeighbourIndex(1)}
-          ></Card>
-          <Card
-            color={CardColor[2]}
-            style={{
-              zIndex: showCard2 ? 4 : hoverCard2 ? 6 : 2,
-            }}
-            onMouseOver={() => setHover(2)}
-            onMouseOut={() => resetHover(2)}
-          ></Card>
-          <Card color={CardColor[0]}></Card>
-          <Card
-            color={CardColor[3]}
-            style={{
-              zIndex: showCard4 ? 5 : hoverCard4 ? 6 : 2,
-            }}
-            onMouseOver={() => setHover(4)}
-            onMouseOut={() => resetHover(4)}
-          ></Card>
-          <Card
-            color={CardColor[4]}
-            onMouseOver={() => setNeighbourIndex(5)}
-            onMouseOut={() => resetNeighbourIndex(5)}
-          ></Card>
+          {inactiveSchemas.map((e, i) => (
+            <Card
+              key={e.id}
+              index={i}
+              schema={e}
+              schemaDispatch={schemaDispatch}
+              stackControls={stackControls}
+            />
+          ))}
         </SContainer>
       )}
     </>
